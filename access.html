@@ -56,26 +56,6 @@
             position: relative;
         }
 
-        .rotate-container {
-            margin-top: 30px;
-            display: none; /* Initially hidden */
-            text-align: center;
-        }
-
-        .rotate-text {
-            font-size: 18px;
-            font-weight: bold;
-            color: red;
-            margin-bottom: 10px;
-        }
-
-        .rotate-gif {
-            width: 100%;
-            max-width: 250px;
-            display: block;
-            margin: 0 auto 10px;
-        }
-
         .access-button {
             background-color: green;
             color: white;
@@ -117,12 +97,6 @@
         <!-- "Access all 4" Button -->
         <button id="accessAllBtn" class="access-button" onclick="showForm()">ACCESS ALL 4</button>
 
-        <!-- Recommendation GIF (Mobile Only - Initially Hidden) -->
-        <div id="rotateContainer" class="rotate-container">
-            <p class="rotate-text">We recommend you to:</p>
-            <img src="rotate.gif" alt="Recommendation GIF" class="rotate-gif">
-        </div>
-
         <!-- Google Form (Initially Hidden) -->
         <div class="form-container" id="googleFormContainer">
             <iframe id="googleForm" class="google-form-iframe"
@@ -133,13 +107,16 @@
 
     <script>
         function showForm() {
-            // Detect if user is on mobile
-            if (window.innerWidth <= 768) {
-                document.getElementById("rotateContainer").style.display = "block"; // Show the recommendation section
-            }
+            document.getElementById("googleFormContainer").style.display = "block";
+            document.getElementById("accessAllBtn").style.display = "none";
 
-            document.getElementById("googleFormContainer").style.display = "block"; // Show the form
-            document.getElementById("accessAllBtn").style.display = "none"; // Hide the button
+            // Monitor the iframe to detect when the Thank You page appears
+            setInterval(() => {
+                let iframe = document.getElementById("googleForm");
+                if (iframe.contentWindow.document.body.innerText.includes("Your response has been recorded")) {
+                    window.location.href = "https://balepuri.github.io/unlockedfree/"; // Redirects to new page
+                }
+            }, 2000); // Check every 2 seconds
         }
     </script>
 
