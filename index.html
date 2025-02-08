@@ -29,10 +29,6 @@
             margin-bottom: 20px;
         }
 
-        .underline {
-            text-decoration: underline;
-        }
-
         video {
             width: 100%;
             max-width: 500px;
@@ -70,7 +66,7 @@
 
     <div class="container">
         <!-- Headline -->
-        <h2 class="headline">Pick <span class="underline">ONE</span> option below and claim it for FREE!</h2>
+        <h2 class="headline">Pick <u>ONE</u> option below and claim it for FREE!</h2>
 
         <!-- MP4 Video -->
         <video controls>
@@ -91,18 +87,14 @@
         <button class="option-button" onclick="openNewTab('access.html')">
             <img src="travel4.png" alt="Option 4"> Travel 20x/year Planner
         </button>
-        <!-- New Button -->
         <button class="option-button" onclick="openNewTab('access.html')">
-            <img src="freenights.png" alt="Free Nights"> How To Get Free Nights in Bale Puri
+            <img src="bale.png" alt="Option 5"> How To Get Free Nights in Bale Puri
         </button>
     </div>
 
     <script>
         function openNewTab(url) {
-            if (event) {
-                event.preventDefault(); // Prevent accidental auto-clicks
-                window.open(url, '_blank'); // Open in new tab only when user clicks
-            }
+            window.open(url, '_blank'); // Opens the link in a new tab
         }
     </script>
 
