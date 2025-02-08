@@ -31,6 +31,10 @@
             margin-bottom: 20px;
         }
 
+        .underline {
+            text-decoration: underline;
+        }
+
         .option-button {
             width: 100%;
             display: flex;
@@ -67,7 +71,7 @@
         <img src="your-logo.png" alt="Company Logo" class="logo">
         
         <!-- Heading -->
-        <h2>Pick ONE option below and claim it for FREE!</h2>
+        <h2>Pick <span class="underline">ONE</span> option below and claim it for FREE!</h2>
 
         <!-- Options -->
         <button class="option-button" id="btn1" onclick="handleClick(1, 'access.html')">
@@ -81,6 +85,9 @@
         </button>
         <button class="option-button" id="btn4" onclick="handleClick(4, 'access.html')">
             <img src="travel4.png" alt="Option 4"> Travel 20x/year Planner
+        </button>
+        <button class="option-button" onclick="handleClick(5, 'access.html')">
+            <img src="freenights.png" alt="Bale Puri"> How To Get Free Nights in Bale Puri
         </button>
     </div>
 
