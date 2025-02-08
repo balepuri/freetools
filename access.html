@@ -57,10 +57,9 @@
         }
 
         .rotate-container {
-            margin-top: 0px; /* Initially no space */
-            display: none;
+            margin-top: 30px;
+            display: none; /* Initially hidden */
             text-align: center;
-            transition: margin-top 0.5s ease; /* Smooth transition */
         }
 
         .rotate-text {
@@ -118,7 +117,7 @@
         <!-- "Access all 4" Button -->
         <button id="accessAllBtn" class="access-button" onclick="showForm()">ACCESS ALL 4</button>
 
-        <!-- Recommendation GIF (Initially Hidden) -->
+        <!-- Recommendation GIF (Mobile Only - Initially Hidden) -->
         <div id="rotateContainer" class="rotate-container">
             <p class="rotate-text">We recommend you to:</p>
             <img src="rotate.gif" alt="Recommendation GIF" class="rotate-gif">
@@ -134,8 +133,11 @@
 
     <script>
         function showForm() {
-            document.getElementById("rotateContainer").style.display = "block"; // Show the recommendation section
-            document.getElementById("rotateContainer").style.marginTop = "30px"; // Add spacing
+            // Detect if user is on mobile
+            if (window.innerWidth <= 768) {
+                document.getElementById("rotateContainer").style.display = "block"; // Show the recommendation section
+            }
+
             document.getElementById("googleFormContainer").style.display = "block"; // Show the form
             document.getElementById("accessAllBtn").style.display = "none"; // Hide the button
         }
