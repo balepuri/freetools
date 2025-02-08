@@ -23,7 +23,7 @@
 
         .logo {
             width: 100px;
-            margin-bottom: 20px;
+            margin-bottom: 10px; /* Reduced space */
         }
 
         h2 {
@@ -67,14 +67,14 @@
         <img src="your-logo.png" alt="Company Logo" class="logo">
         
         <!-- Heading -->
-        <h2>Click the button below to get it FREE!</h2>
+        <h2>Pick ONE option below and claim it for FREE!</h2>
 
         <!-- Options -->
         <button class="option-button" id="btn1" onclick="handleClick(1, 'access.html')">
             <img src="chatgpt1.png" alt="Option 1"> 20K ChatGPT Prompts to Boost Your Work 1000x Faster
         </button>
         <button class="option-button" id="btn2" onclick="handleClick(2, 'access.html')">
-            <img src="time2.png" alt="Option 2"> Work-Life Balance Management for Ambitious Millennials
+            <img src="time2.png" alt="Option 2"> Work-Life Balance for Ambitious Millennials
         </button>
         <button class="option-button" id="btn3" onclick="handleClick(3, 'access.html')">
             <img src="finance3.png" alt="Option 3"> Financial Management to Stop Losing Money Every Month
@@ -86,13 +86,8 @@
 
     <script>
         function handleClick(option, url) {
-            // Store the selected option in localStorage
             localStorage.setItem("selectedOption", option);
-
-            // Disable all other buttons except the selected one
             disableOtherButtons(option);
-
-            // Redirect to the access page
             window.location.href = url;
         }
 
@@ -106,11 +101,10 @@
 
             for (let key in buttons) {
                 if (parseInt(key) !== selectedOption) {
-                    buttons[key].disabled = true;  // Disable all except the selected one
+                    buttons[key].disabled = true;
                 }
             }
 
-            // Store disabled state in localStorage
             localStorage.setItem("disabledButtons", JSON.stringify(Object.keys(buttons).filter(key => parseInt(key) !== selectedOption)));
         }
 
@@ -120,13 +114,10 @@
 
             if (selectedOption && disabledButtons) {
                 disableOtherButtons(parseInt(selectedOption));
-
-                // Ensure the selected button remains enabled
                 document.getElementById(`btn${selectedOption}`).disabled = false;
             }
         }
 
-        // Check previous selection when page loads
         checkPreviousSelection();
     </script>
 
