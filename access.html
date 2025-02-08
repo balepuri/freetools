@@ -30,9 +30,9 @@
         }
 
         .small-text {
-            font-size: 20px; /* Increased font size */
-            font-weight: bold; /* Make it bold */
-            text-decoration: underline; /* Add underline */
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: underline;
             color: black;
             margin-bottom: 15px;
         }
@@ -46,12 +46,13 @@
 
         video {
             width: 100%;
+            max-width: 300px; /* Keep it vertical but not full screen */
             border-radius: 10px;
         }
 
         .form-container {
             margin-top: 20px;
-            display: none; /* Initially hidden */
+            display: none;
             position: relative;
         }
 
@@ -78,25 +79,19 @@
 <body>
 
     <div class="container">
-        <!-- Large Progress GIF -->
         <img src="progress.gif" alt="Progress Indicator" class="progress-gif">
         
-        <!-- Bold, Bigger, and Underlined Text Under Progress GIF -->
         <p class="small-text">You're One Step Closer!</p>
 
-        <!-- Attention-Grabbing Heading -->
-        <h2 class="video-heading">Tonton Video 30 Detik Dibawah Ini!</h2>
+        <h2 class="video-heading">Tonton Video 15 Detik Dibawah Ini!</h2>
 
-        <!-- MP4 Video -->
         <video controls>
             <source src="your-video.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
 
-        <!-- "Access all 4" Button -->
         <button id="accessAllBtn" class="access-button" onclick="showForm()">ACCESS ALL 4</button>
 
-        <!-- Google Form (Initially Hidden) -->
         <div class="form-container" id="googleFormContainer">
             <iframe id="googleForm" class="google-form-iframe"
                 src="https://docs.google.com/forms/d/e/1FAIpQLSc2JwE2CHpg6kOhEMpoV5w28Sl2HCwD4Zis0i_Zx2tkm_PzmA/viewform?embedded=true">
@@ -106,19 +101,8 @@
 
     <script>
         function showForm() {
-            document.getElementById("googleFormContainer").style.display = "block"; // Show the form
-            document.getElementById("accessAllBtn").style.display = "none"; // Hide the button
-
-            // Wait for the form to load inside the iframe
-            setTimeout(() => {
-                let iframe = document.getElementById("googleForm");
-                let iframeDocument = iframe.contentWindow.document;
-
-                // Hide "Page X of Y" using JavaScript
-                let pageCountElements = iframeDocument.querySelectorAll("div.freebirdFormviewerViewHeaderPageNumber");
-                pageCountElements.forEach(el => el.style.display = "none");
-
-            }, 2000); // Allow time for the iframe to fully load
+            document.getElementById("googleFormContainer").style.display = "block";
+            document.getElementById("accessAllBtn").style.display = "none";
         }
     </script>
 
