@@ -29,10 +29,7 @@
 
         .form-container {
             margin-top: 20px;
-        }
-
-        .hidden {
-            display: none;
+            display: none; /* Initially hidden */
         }
 
         .access-button {
@@ -46,11 +43,6 @@
             margin-top: 20px;
             width: 100%;
         }
-
-        .access-button:disabled {
-            background-color: gray;
-            cursor: not-allowed;
-        }
     </style>
 </head>
 <body>
@@ -62,31 +54,20 @@
             Your browser does not support the video tag.
         </video>
 
-        <!-- Google Form Embed -->
-        <div class="form-container">
-            <iframe id="googleForm" src="https://docs.google.com/forms/d/e/1FAIpQLSc2JwE2CHpg6kOhEMpoV5w28Sl2HCwD4Zis0i_Zx2tkm_PzmA/viewform?embedded=true" width="100%" height="1200px" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
-        </div>
+        <!-- "Access all 4" Button -->
+        <button id="accessAllBtn" class="access-button" onclick="showForm()">Access all 4</button>
 
-        <!-- Hidden Button (Visible After Form Submission) -->
-        <button id="accessAllBtn" class="access-button hidden" onclick="redirectToFinalPage()">Access all 4</button>
+        <!-- Google Form (Initially Hidden) -->
+        <div class="form-container" id="googleFormContainer">
+            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSc2JwE2CHpg6kOhEMpoV5w28Sl2HCwD4Zis0i_Zx2tkm_PzmA/viewform?embedded=true" width="100%" height="1200px" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+        </div>
     </div>
 
     <script>
-        function checkFormSubmission() {
-            alert("Thank you for submitting the form! You can now access all 4 resources.");
-            document.getElementById("accessAllBtn").classList.remove("hidden"); 
+        function showForm() {
+            document.getElementById("googleFormContainer").style.display = "block"; // Show the form
+            document.getElementById("accessAllBtn").style.display = "none"; // Hide the button
         }
-
-        function redirectToFinalPage() {
-            window.location.href = "https://example.com/final-access-page"; // Replace with the actual final page URL
-        }
-
-        // Detect Google Form Submission - User must manually click "Access All 4"
-        window.addEventListener("message", function(event) {
-            if (event.data === "formSubmitted") {
-                checkFormSubmission();
-            }
-        });
     </script>
 
 </body>
