@@ -8,13 +8,12 @@
         body {
             text-align: center;
             font-family: Arial, sans-serif;
+            margin-top: 50px;
             background-color: #f5f5f5;
-            margin: 0;
-            padding: 20px;
         }
-
+        
         .container {
-            max-width: 600px;
+            max-width: 400px;
             margin: auto;
             background: white;
             padding: 20px;
@@ -23,14 +22,12 @@
         }
 
         .logo {
-            width: 150px;
-            margin-bottom: 10px;
+            width: 100px;
+            margin-bottom: 10px; /* Reduced space */
         }
 
-        .headline {
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
+        h2 {
+            font-size: 18px;
             margin-bottom: 20px;
         }
 
@@ -68,9 +65,9 @@
     <div class="container">
         <!-- Logo -->
         <img src="your-logo.png" alt="Company Logo" class="logo">
-
-        <!-- Headline -->
-        <h2 class="headline">Pick <u>ONE</u> option below and claim it for FREE!</h2>
+        
+        <!-- Heading -->
+        <h2>Pick ONE option below and claim it for FREE!</h2>
 
         <!-- Options -->
         <button class="option-button" id="btn1" onclick="handleClick(1, 'access.html')">
@@ -85,20 +82,12 @@
         <button class="option-button" id="btn4" onclick="handleClick(4, 'access.html')">
             <img src="travel4.png" alt="Option 4"> Travel 20x/year Planner
         </button>
-        <button class="option-button" id="btn5" onclick="handleClick(5, 'access.html')">
-            <img src="bale.png" alt="Option 5"> How To Get Free Nights in Bale Puri
-        </button>
     </div>
 
     <script>
         function handleClick(option, url) {
-            // Store the selected option in localStorage
             localStorage.setItem("selectedOption", option);
-
-            // Disable all buttons except the selected one
             disableOtherButtons(option);
-
-            // Redirect to the selected option's link (same tab)
             window.location.href = url;
         }
 
@@ -108,10 +97,8 @@
                 2: document.getElementById("btn2"),
                 3: document.getElementById("btn3"),
                 4: document.getElementById("btn4"),
-                5: document.getElementById("btn5")
             };
 
-            // Disable all buttons except the selected one
             for (let key in buttons) {
                 if (parseInt(key) !== selectedOption) {
                     buttons[key].disabled = true;
@@ -131,7 +118,6 @@
             }
         }
 
-        // Check the previous selection when the page loads
         checkPreviousSelection();
     </script>
 
