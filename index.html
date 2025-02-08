@@ -22,17 +22,15 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
+        .logo {
+            width: 150px;
+            margin-bottom: 10px;
+        }
+
         .headline {
             font-size: 24px;
             font-weight: bold;
             color: #333;
-            margin-bottom: 20px;
-        }
-
-        video {
-            width: 100%;
-            max-width: 500px;
-            border-radius: 10px;
             margin-bottom: 20px;
         }
 
@@ -65,14 +63,11 @@
 <body>
 
     <div class="container">
+        <!-- Logo -->
+        <img src="your-logo.png" alt="Company Logo" class="logo">
+
         <!-- Headline -->
         <h2 class="headline">Pick <u>ONE</u> option below and claim it for FREE!</h2>
-
-        <!-- MP4 Video -->
-        <video controls>
-            <source src="your-video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
 
         <!-- Options -->
         <button class="option-button" onclick="openNewTab('access.html')">
