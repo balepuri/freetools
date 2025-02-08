@@ -23,8 +23,10 @@
         }
 
         .progress-gif {
-            width: 100px;
-            margin-bottom: 10px;
+            width: 100%; /* Make it fit the full width of the container */
+            max-width: 600px; /* Prevent it from being too large */
+            display: block;
+            margin: 0 auto 10px; /* Center it and add some space below */
         }
 
         .small-text {
@@ -67,7 +69,7 @@
 <body>
 
     <div class="container">
-        <!-- Progress GIF -->
+        <!-- Large Progress GIF -->
         <img src="progress.gif" alt="Progress Indicator" class="progress-gif">
         
         <!-- Small Text Under Progress GIF -->
