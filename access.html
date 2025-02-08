@@ -23,10 +23,10 @@
         }
 
         .progress-gif {
-            width: 100%; /* Make it fit the full width of the container */
-            max-width: 600px; /* Prevent it from being too large */
+            width: 100%;
+            max-width: 600px;
             display: block;
-            margin: 0 auto 10px; /* Center it and add some space below */
+            margin: 0 auto 10px;
         }
 
         .small-text {
@@ -49,7 +49,8 @@
 
         .form-container {
             margin-top: 20px;
-            display: none; /* Initially hidden */
+            display: none;
+            position: relative;
         }
 
         .access-button {
@@ -57,12 +58,18 @@
             color: white;
             padding: 15px;
             font-size: 20px;
-            font-weight: bold; /* Make button text bold */
+            font-weight: bold;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             margin-top: 20px;
             width: 100%;
+        }
+
+        .google-form-iframe {
+            width: 100%;
+            height: 1200px;
+            border: none;
         }
     </style>
 </head>
@@ -89,7 +96,9 @@
 
         <!-- Google Form (Initially Hidden) -->
         <div class="form-container" id="googleFormContainer">
-            <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSc2JwE2CHpg6kOhEMpoV5w28Sl2HCwD4Zis0i_Zx2tkm_PzmA/viewform?embedded=true" width="100%" height="1200px" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+            <iframe id="googleForm" class="google-form-iframe"
+                src="https://docs.google.com/forms/d/e/1FAIpQLSc2JwE2CHpg6kOhEMpoV5w28Sl2HCwD4Zis0i_Zx2tkm_PzmA/viewform?embedded=true">
+            </iframe>
         </div>
     </div>
 
@@ -97,6 +106,17 @@
         function showForm() {
             document.getElementById("googleFormContainer").style.display = "block"; // Show the form
             document.getElementById("accessAllBtn").style.display = "none"; // Hide the button
+
+            // Wait for the form to load inside the iframe
+            setTimeout(() => {
+                let iframe = document.getElementById("googleForm");
+                let iframeDocument = iframe.contentWindow.document;
+
+                // Hide "Page X of Y" using JavaScript
+                let pageCountElements = iframeDocument.querySelectorAll("div.freebirdFormviewerViewHeaderPageNumber");
+                pageCountElements.forEach(el => el.style.display = "none");
+
+            }, 2000); // Allow time for the iframe to fully load
         }
     </script>
 
