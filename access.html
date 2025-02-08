@@ -46,7 +46,7 @@
 
         video {
             width: 100%;
-            max-width: 300px; /* Keep it vertical but not full screen */
+            max-width: 300px;
             border-radius: 10px;
         }
 
@@ -54,6 +54,27 @@
             margin-top: 20px;
             display: none;
             position: relative;
+        }
+
+        .rotate-container {
+            margin-top: 0px; /* Initially no space */
+            display: none;
+            text-align: center;
+            transition: margin-top 0.5s ease; /* Smooth transition */
+        }
+
+        .rotate-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: red;
+            margin-bottom: 10px;
+        }
+
+        .rotate-gif {
+            width: 100%;
+            max-width: 250px;
+            display: block;
+            margin: 0 auto 10px;
         }
 
         .access-button {
@@ -79,19 +100,31 @@
 <body>
 
     <div class="container">
+        <!-- Large Progress GIF -->
         <img src="progress.gif" alt="Progress Indicator" class="progress-gif">
         
+        <!-- Bold, Bigger, and Underlined Text Under Progress GIF -->
         <p class="small-text">You're One Step Closer!</p>
 
+        <!-- Attention-Grabbing Heading -->
         <h2 class="video-heading">Tonton Video 15 Detik Dibawah Ini!</h2>
 
+        <!-- MP4 Video -->
         <video controls>
             <source src="your-video.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
 
+        <!-- "Access all 4" Button -->
         <button id="accessAllBtn" class="access-button" onclick="showForm()">ACCESS ALL 4</button>
 
+        <!-- Recommendation GIF (Initially Hidden) -->
+        <div id="rotateContainer" class="rotate-container">
+            <p class="rotate-text">We recommend you to:</p>
+            <img src="rotate.gif" alt="Recommendation GIF" class="rotate-gif">
+        </div>
+
+        <!-- Google Form (Initially Hidden) -->
         <div class="form-container" id="googleFormContainer">
             <iframe id="googleForm" class="google-form-iframe"
                 src="https://docs.google.com/forms/d/e/1FAIpQLSc2JwE2CHpg6kOhEMpoV5w28Sl2HCwD4Zis0i_Zx2tkm_PzmA/viewform?embedded=true">
@@ -101,8 +134,10 @@
 
     <script>
         function showForm() {
-            document.getElementById("googleFormContainer").style.display = "block";
-            document.getElementById("accessAllBtn").style.display = "none";
+            document.getElementById("rotateContainer").style.display = "block"; // Show the recommendation section
+            document.getElementById("rotateContainer").style.marginTop = "30px"; // Add spacing
+            document.getElementById("googleFormContainer").style.display = "block"; // Show the form
+            document.getElementById("accessAllBtn").style.display = "none"; // Hide the button
         }
     </script>
 
