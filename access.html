@@ -78,7 +78,7 @@
 </head>
 <body>
 
-    <div class="container">
+    <div class="container" id="mainContent">
         <!-- Large Progress GIF -->
         <img src="progress.gif" alt="Progress Indicator" class="progress-gif">
         
@@ -118,7 +118,11 @@
                 // Find all links inside the Google Form iframe
                 let links = iframeDocument.querySelectorAll("a");
                 links.forEach(link => {
-                    link.setAttribute("target", "_blank"); // Forces links to open in a new tab
+                    link.addEventListener("click", function(event) {
+                        event.preventDefault(); // Prevents default behavior
+                        document.getElementById("mainContent").innerHTML = ""; // Clears everything
+                        document.getElementById("googleFormContainer").style.display = "block"; // Keeps the form visible
+                    });
                 });
 
             }, 2000); // Check every 2 seconds
