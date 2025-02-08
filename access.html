@@ -46,7 +46,7 @@
 
         video {
             width: 100%;
-            max-width: 300px; /* Keep it vertical but not full screen */
+            max-width: 300px;
             border-radius: 10px;
         }
 
@@ -103,6 +103,27 @@
         function showForm() {
             document.getElementById("googleFormContainer").style.display = "block";
             document.getElementById("accessAllBtn").style.display = "none";
+
+            // Wait for iframe to load completely
+            setTimeout(() => {
+                let iframe = document.getElementById("googleForm");
+                let iframeDocument = iframe.contentWindow.document;
+
+                // Hide unwanted elements inside Google Forms
+                let elementsToHide = [
+                    "div.freebirdFormviewerViewFooterDisclaimer", // "Google Form Disclaimer"
+                    "div.freebirdFormviewerViewHeaderSignIn", // "Login to Google"
+                    "div.freebirdFormviewerViewNumberedItemContainer", // Page number "Halaman X dari Y"
+                    "div.freebirdFormviewerViewItemsItemRequiredAsterisk", // "* Required Question"
+                    "div.appsMaterialWizButtonPaperbuttonLabel" // "Kosongkan Formulir" Button
+                ];
+
+                elementsToHide.forEach(selector => {
+                    let elements = iframeDocument.querySelectorAll(selector);
+                    elements.forEach(el => el.style.display = "none");
+                });
+
+            }, 2000); // Give it 2 seconds to ensure the form has fully loaded
         }
     </script>
 
