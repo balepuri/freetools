@@ -56,6 +56,26 @@
             position: relative;
         }
 
+        .rotate-container {
+            margin-top: 30px;
+            display: none; /* Initially hidden */
+            text-align: center;
+        }
+
+        .rotate-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: red;
+            margin-bottom: 10px;
+        }
+
+        .rotate-gif {
+            width: 100%;
+            max-width: 250px;
+            display: block;
+            margin: 0 auto 10px;
+        }
+
         .access-button {
             background-color: green;
             color: white;
@@ -73,39 +93,6 @@
             width: 100%;
             height: 1200px;
             border: none;
-        }
-
-        .code-container {
-            display: none;
-            margin-top: 20px;
-        }
-
-        .code-input {
-            padding: 10px;
-            font-size: 16px;
-            text-align: center;
-            width: 200px;
-            border: 2px solid #000;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        .submit-code-button {
-            background-color: blue;
-            color: white;
-            padding: 10px 15px;
-            font-size: 16px;
-            font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            display: none;
-        }
-
-        .error-message {
-            color: red;
-            font-size: 14px;
-            display: none;
         }
     </style>
 </head>
@@ -130,51 +117,30 @@
         <!-- "Access all 4" Button -->
         <button id="accessAllBtn" class="access-button" onclick="showForm()">ACCESS ALL 4</button>
 
+        <!-- Rotate GIF for Mobile Users (Initially Hidden) -->
+        <div id="rotateContainer" class="rotate-container">
+            <p class="rotate-text">We recommend you to:</p>
+            <img src="rotate.gif" alt="Rotate Your Phone" class="rotate-gif">
+        </div>
+
         <!-- Google Form (Initially Hidden) -->
         <div class="form-container" id="googleFormContainer">
             <iframe id="googleForm" class="google-form-iframe"
                 src="https://docs.google.com/forms/d/e/1FAIpQLSc2JwE2CHpg6kOhEMpoV5w28Sl2HCwD4Zis0i_Zx2tkm_PzmA/viewform?embedded=true">
             </iframe>
         </div>
-
-        <!-- Code Input Section (Hidden Initially) -->
-        <div class="code-container" id="codeContainer">
-            <p>Enter the code to continue:</p>
-            <input type="text" id="codeInput" class="code-input" placeholder="Enter code here">
-            <button id="submitCodeBtn" class="submit-code-button" onclick="validateCode()">Submit</button>
-            <p id="errorMessage" class="error-message">Incorrect code. Please try again.</p>
-        </div>
     </div>
 
     <script>
         function showForm() {
-            document.getElementById("googleFormContainer").style.display = "block";
-            document.getElementById("accessAllBtn").style.display = "none";
-            document.getElementById("codeContainer").style.display = "block"; // Show code input field
-        }
-
-        function validateCode() {
-            let inputCode = document.getElementById("codeInput").value.trim().toLowerCase();
-            let correctCode = "balepuri";
-            let errorMessage = document.getElementById("errorMessage");
-
-            if (inputCode === correctCode) {
-                window.location.href = "https://balepuri.github.io/unlockedfree/";
-            } else {
-                errorMessage.style.display = "block"; // Show error message
+            // Detect if user is on mobile
+            if (window.innerWidth <= 768) {
+                document.getElementById("rotateContainer").style.display = "block"; // Show the rotate GIF and text
             }
+
+            document.getElementById("googleFormContainer").style.display = "block"; // Show the form
+            document.getElementById("accessAllBtn").style.display = "none"; // Hide the button
         }
-
-        document.getElementById("codeInput").addEventListener("input", function() {
-            let inputCode = document.getElementById("codeInput").value.trim().toLowerCase();
-            let submitBtn = document.getElementById("submitCodeBtn");
-
-            if (inputCode.length > 0) {
-                submitBtn.style.display = "inline-block"; // Show button when user starts typing
-            } else {
-                submitBtn.style.display = "none"; // Hide button if input is empty
-            }
-        });
     </script>
 
 </body>
