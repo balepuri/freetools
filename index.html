@@ -99,7 +99,10 @@
 
     <script>
         function openNewTab(url) {
-            window.open(url, '_blank'); // Opens the link in a new tab
+            if (event) {
+                event.preventDefault(); // Prevent accidental auto-clicks
+                window.open(url, '_blank'); // Open in new tab only when user clicks
+            }
         }
     </script>
 
