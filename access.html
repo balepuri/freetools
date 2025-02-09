@@ -113,17 +113,18 @@
             margin-top: 20px;
         }
 
+        .rotate-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: black;
+            margin-bottom: 10px;
+        }
+
         .rotate-gif {
             width: 80%;
             max-width: 400px;
             display: block;
             margin: 0 auto 10px;
-        }
-
-        @media (max-width: 768px) {
-            .rotate-container {
-                display: block;
-            }
         }
     </style>
 </head>
@@ -148,10 +149,10 @@
         <!-- "ACCESS ALL 5" Button -->
         <button id="accessAllBtn" class="access-button" onclick="showForm()">ACCESS ALL 5</button>
 
-        <!-- Rotate GIF for Mobile -->
+        <!-- Rotate Text & GIF (Initially Hidden) -->
         <div class="rotate-container" id="rotateContainer">
+            <p class="rotate-text">We recommend you to:</p>
             <img src="rotate.gif" alt="Rotate Your Phone" class="rotate-gif">
-            <p class="small-text">We recommend you to:</p>
         </div>
 
         <!-- Google Form (Initially Hidden) -->
@@ -176,7 +177,7 @@
             document.getElementById("accessAllBtn").style.display = "none";
             document.getElementById("codeContainer").style.display = "block"; // Show code input field
 
-            // Show Rotate GIF only for mobile users
+            // Show Rotate Text & GIF only for mobile users
             if (window.innerWidth <= 768) {
                 document.getElementById("rotateContainer").style.display = "block";
             }
