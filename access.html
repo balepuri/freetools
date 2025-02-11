@@ -108,6 +108,24 @@
             display: none;
         }
 
+        .rotate-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .rotate-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: black;
+            margin-bottom: 10px;
+        }
+
+        .rotate-gif {
+            width: 80%;
+            max-width: 400px;
+            display: block;
+            margin: 0 auto 10px;
+        }
     </style>
 </head>
 <body>
@@ -117,7 +135,7 @@
         <img src="progress.gif" alt="Progress Indicator" class="progress-gif">
         
         <!-- Bold, Bigger, and Underlined Text Under Progress GIF -->
-        <p class="small-text">Anda Satu Langkah Lebih Dekat!</p>
+        <p class="small-text">You're One Step Closer!</p>
 
         <!-- Attention-Grabbing Heading -->
         <h2 class="video-heading">Tonton Video 18 Detik Dibawah Ini!</h2>
@@ -130,6 +148,12 @@
 
         <!-- "ACCESS ALL 5" Button -->
         <button id="accessAllBtn" class="access-button" onclick="showForm()">ACCESS ALL 5</button>
+
+        <!-- Rotate Text & GIF (Initially Hidden) -->
+        <div class="rotate-container" id="rotateContainer">
+            <p class="rotate-text">We recommend you to:</p>
+            <img src="rotate.gif" alt="Rotate Your Phone" class="rotate-gif">
+        </div>
 
         <!-- Google Form (Initially Hidden) -->
         <div class="form-container" id="googleFormContainer">
@@ -152,6 +176,12 @@
             document.getElementById("googleFormContainer").style.display = "block";
             document.getElementById("accessAllBtn").style.display = "none";
             document.getElementById("codeContainer").style.display = "block"; // Show code input field
+
+            // Show Rotate Text & GIF only for mobile users
+            if (window.innerWidth <= 768) {
+                document.getElementById("rotateContainer").style.display = "block";
+            }
+        }
 
         function validateCode() {
             let inputCode = document.getElementById("codeInput").value.trim().toLowerCase();
