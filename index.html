@@ -57,13 +57,14 @@
             margin-right: 10px;
         }
 
+        /* Standard Disabled Button (Dark Gray) */
         .option-button:disabled {
-            background-color: #d9d9d9; /* Mix of gray (50%) and white (50%) */
+            background-color: #888888; /* Dark gray */
             cursor: not-allowed;
             border: 2px solid #ccc;
         }
 
-        /* Styling for the disabled button with Gaussian blur */
+        /* Special Style for "COMING SOON" Button */
         .blur-container {
             position: relative;
             width: 100%;
@@ -75,7 +76,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.05); /* Extremely low transparency */
+            background: rgba(255, 255, 255, 0.03); /* Very light blur */
             backdrop-filter: blur(1px); /* Minimal blur */
             border-radius: 8px;
         }
@@ -88,6 +89,12 @@
             color: red;
             font-size: 14px;
             font-weight: bold;
+        }
+
+        /* Initial Light Gray for "COMING SOON" Button */
+        #btn5 {
+            background-color: #d9d9d9; /* Lighter gray before being disabled */
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -114,7 +121,7 @@
             <img src="bale5.png" alt="Option 4"> How To Get Free Nights in Bale Puri
         </button>
 
-        <!-- Disabled button with Gaussian blur and COMING SOON text -->
+        <!-- Disabled "COMING SOON" Button -->
         <div class="blur-container">
             <button class="option-button" id="btn5" disabled>
                 <img src="comingsoon.png" alt="Option 5"> How We Make 300jt/bulan With A Simple Business Model
@@ -138,11 +145,12 @@
                 2: document.getElementById("btn2"),
                 3: document.getElementById("btn3"),
                 4: document.getElementById("btn4"),
+                5: document.getElementById("btn5") // Ensure this button also gets disabled
             };
 
             for (let key in buttons) {
                 if (parseInt(key) !== selectedOption) {
-                    buttons[key].disabled = true;
+                    buttons[key].disabled = true; // Make other buttons dark gray
                 }
             }
 
