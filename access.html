@@ -107,25 +107,6 @@
             font-size: 14px;
             display: none;
         }
-
-        .rotate-container {
-            display: none;
-            margin-top: 20px;
-        }
-
-        .rotate-text {
-            font-size: 18px;
-            font-weight: bold;
-            color: black;
-            margin-bottom: 10px;
-        }
-
-        .rotate-gif {
-            width: 80%;
-            max-width: 400px;
-            display: block;
-            margin: 0 auto 10px;
-        }
     </style>
 </head>
 <body>
@@ -149,12 +130,6 @@
         <!-- "ACCESS ALL 5" Button -->
         <button id="accessAllBtn" class="access-button" onclick="showForm()">ACCESS ALL 5</button>
 
-        <!-- Rotate Text & GIF (Initially Hidden) -->
-        <div class="rotate-container" id="rotateContainer">
-            <p class="rotate-text">We recommend you to:</p>
-            <img src="rotate.gif" alt="Rotate Your Phone" class="rotate-gif">
-        </div>
-
         <!-- Google Form (Initially Hidden) -->
         <div class="form-container" id="googleFormContainer">
             <iframe id="googleForm" class="google-form-iframe"
@@ -176,11 +151,6 @@
             document.getElementById("googleFormContainer").style.display = "block";
             document.getElementById("accessAllBtn").style.display = "none";
             document.getElementById("codeContainer").style.display = "block"; // Show code input field
-
-            // Show Rotate Text & GIF only for mobile users
-            if (window.innerWidth <= 768) {
-                document.getElementById("rotateContainer").style.display = "block";
-            }
         }
 
         function validateCode() {
