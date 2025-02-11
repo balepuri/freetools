@@ -83,9 +83,6 @@
         <button class="option-button" id="btn3" onclick="handleClick(3, 'access.html')">
             <img src="finance3.png" alt="Option 3"> Financial Management to Stop Losing Money Every Month
         </button>
-        <button class="option-button" id="btn4" onclick="handleClick(4, 'access.html')">
-            <img src="travel4.png" alt="Option 4"> Travel 20x/year Planner
-        </button>
         <button class="option-button" id="btn5" onclick="handleClick(5, 'access.html')">
             <img src="bale5.png" alt="Bale Puri"> How To Get Free Nights in Bale Puri
         </button>
@@ -103,8 +100,7 @@
                 1: document.getElementById("btn1"),
                 2: document.getElementById("btn2"),
                 3: document.getElementById("btn3"),
-                4: document.getElementById("btn4"),
-                5: document.getElementById("btn5") // Now includes the new button
+                5: document.getElementById("btn5") // Removed btn4 since Travel 20x/year Planner is gone
             };
 
             for (let key in buttons) {
