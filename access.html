@@ -67,7 +67,6 @@
             cursor: pointer;
             margin-top: 20px;
             width: 100%;
-            display: none; /* Hide button initially */
         }
 
         .google-form-iframe {
@@ -120,15 +119,15 @@
         <p class="small-text">Anda Satu Langkah Lebih Dekat!</p>
 
         <!-- Attention-Grabbing Heading -->
-        <h2 class="video-heading" id="videoHeading">Tonton Video 18 Detik Dibawah Ini!</h2>
+        <h2 class="video-heading">Tonton Video 18 Detik Dibawah Ini!</h2>
 
         <!-- MP4 Video -->
-        <video controls id="introVideo">
+        <video controls>
             <source src="intro.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
 
-        <!-- "ACCESS ALL 5" Button (Initially Hidden) -->
+        <!-- "ACCESS ALL 5" Button -->
         <button id="accessAllBtn" class="access-button" onclick="showForm()">ACCESS ALL 5</button>
 
         <!-- Google Form (Initially Hidden) -->
@@ -148,19 +147,10 @@
     </div>
 
     <script>
-        // Show "Access All 5" only when the video is clicked
-        document.getElementById("introVideo").addEventListener("click", function() {
-            document.getElementById("accessAllBtn").style.display = "block"; // Show button
-        });
-
         function showForm() {
             document.getElementById("googleFormContainer").style.display = "block";
-            document.getElementById("accessAllBtn").style.display = "none"; // Hide button
+            document.getElementById("accessAllBtn").style.display = "none";
             document.getElementById("codeContainer").style.display = "block"; // Show code input field
-
-            // Remove Video & Title
-            document.getElementById("introVideo").style.display = "none";
-            document.getElementById("videoHeading").style.display = "none";
         }
 
         function validateCode() {
