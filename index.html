@@ -47,6 +47,7 @@
             border: 2px solid #000;
             border-radius: 8px;
             text-align: left;
+            position: relative;
             transition: 0.3s;
         }
 
@@ -62,6 +63,32 @@
             border: 2px solid #ccc;
         }
 
+        /* Styling for the disabled button with Gaussian blur */
+        .blur-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .blur-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            border-radius: 8px;
+        }
+
+        .coming-soon-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: red;
+            font-size: 14px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -86,9 +113,16 @@
         <button class="option-button" id="btn4" onclick="handleClick(4, 'access.html')">
             <img src="bale5.png" alt="Option 4"> How To Get Free Nights in Bale Puri
         </button>
-        <button class="option-button" id="btn5" onclick="handleClick(5, 'access.html')">
-            <img src="comingsoon.png" alt="Option 5"> How We Make 300jt/bulan With A Simple Business Model
-        </button>
+
+        <!-- Disabled button with Gaussian blur and COMING SOON text -->
+        <div class="blur-container">
+            <button class="option-button" id="btn5" disabled>
+                <img src="comingsoon.png" alt="Option 5"> How We Make 300jt/bulan With A Simple Business Model
+            </button>
+            <div class="blur-overlay"></div>
+            <div class="coming-soon-text">COMING SOON</div>
+        </div>
+
     </div>
 
     <script>
@@ -104,7 +138,6 @@
                 2: document.getElementById("btn2"),
                 3: document.getElementById("btn3"),
                 4: document.getElementById("btn4"),
-                5: document.getElementById("btn5") // Now includes the new button
             };
 
             for (let key in buttons) {
@@ -122,7 +155,7 @@
 
             if (selectedOption && disabledButtons) {
                 disableOtherButtons(parseInt(selectedOption));
-                document.getElementById(btn${selectedOption}).disabled = false;
+                document.getElementById(`btn${selectedOption}`).disabled = false;
             }
         }
 
