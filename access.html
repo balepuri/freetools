@@ -44,16 +44,8 @@
             margin-bottom: 15px;
         }
 
-        video {
-            width: 100%;
-            max-width: 300px;
-            border-radius: 10px;
-        }
-
         .form-container {
             margin-top: 20px;
-            display: none;
-            position: relative;
         }
 
         .access-button {
@@ -102,6 +94,19 @@
             display: none;
         }
 
+        .confirm-button {
+            background-color: orange;
+            color: white;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+
         .error-message {
             color: red;
             font-size: 14px;
@@ -118,28 +123,22 @@
         <!-- Bold, Bigger, and Underlined Text Under Progress GIF -->
         <p class="small-text">Anda Satu Langkah Lebih Dekat!</p>
 
-        <!-- Attention-Grabbing Heading -->
-        <h2 class="video-heading">Tonton Video 18 Detik Dibawah Ini!</h2>
+        <!-- Updated Text -->
+        <h2 class="video-heading">Kalo Anda isi Google Form di bawah ini, Anda dapat Akses ke semua Toolsnya!</h2>
 
-        <!-- MP4 Video -->
-        <video controls>
-            <source src="intro.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-
-        <!-- "ACCESS ALL 5" Button -->
-        <button id="accessAllBtn" class="access-button" onclick="showForm()">ACCESS ALL 5</button>
-
-        <!-- Google Form (Initially Hidden) -->
-        <div class="form-container" id="googleFormContainer">
+        <!-- Google Form (Now Always Visible) -->
+        <div class="form-container">
             <iframe id="googleForm" class="google-form-iframe"
                 src="https://docs.google.com/forms/d/e/1FAIpQLSc2JwE2CHpg6kOhEMpoV5w28Sl2HCwD4Zis0i_Zx2tkm_PzmA/viewform?embedded=true">
             </iframe>
         </div>
 
+        <!-- "Saya Sudah Isi Google Form" Button -->
+        <button id="confirmBtn" class="confirm-button" onclick="showCodeInput()">Saya Sudah Isi Google Form</button>
+
         <!-- Code Input Section (Hidden Initially) -->
         <div class="code-container" id="codeContainer">
-            <p>Get the code at the end of the form</p>
+            <p>Isi code yang ada di akhir Google Form</p>
             <input type="text" id="codeInput" class="code-input" placeholder="Enter code here">
             <button id="submitCodeBtn" class="submit-code-button" onclick="validateCode()">Submit</button>
             <p id="errorMessage" class="error-message">Incorrect code. Please try again.</p>
@@ -147,10 +146,9 @@
     </div>
 
     <script>
-        function showForm() {
-            document.getElementById("googleFormContainer").style.display = "block";
-            document.getElementById("accessAllBtn").style.display = "none";
+        function showCodeInput() {
             document.getElementById("codeContainer").style.display = "block"; // Show code input field
+            document.getElementById("confirmBtn").style.display = "none"; // Hide confirm button
         }
 
         function validateCode() {
