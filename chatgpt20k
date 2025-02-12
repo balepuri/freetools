@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exclusive Access</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .headline {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            background-color: green;
+            color: white;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            display: block;
+            margin-bottom: 100px; /* Large space before next section */
+        }
+
+        .scroll-box {
+            width: 100%;
+            height: 300px; /* Adjust height if needed */
+            border: 2px solid black;
+            padding: 10px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background-color: white;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .code-container {
+            margin-top: 20px;
+        }
+
+        .code-input {
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+            width: 200px;
+            border: 2px solid #000;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .submit-code-button {
+            background-color: blue;
+            color: white;
+            padding: 10px 15px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- First Section -->
+        <h2 class="headline">Claim Your Exclusive Offer</h2>
+        <button class="button" onclick="redirectToURL()">Get it Now</button>
+
+        <!-- Second Section (With Large Space) -->
+        <h2 class="headline">Read This First</h2>
+        <div class="scroll-box">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ut orci eget metus pretium tincidunt. 
+               Integer varius felis id felis aliquet, nec gravida risus venenatis.</p>
+            <p>More text here...</p>
+            <p>Even more text...</p>
+            <p>Long content continues...</p>
+            <p>Scrollable content section...</p>
+            <p>Scroll down for more information...</p>
+        </div>
+
+        <!-- Button to Reveal Code Entry -->
+        <button class="button" style="background-color: orange;" onclick="showCodeInput()">Get It</button>
+
+        <!-- Code Entry Section (Hidden Initially) -->
+        <div class="hidden" id="codeContainer">
+            <p>Isi code yang ada di akhir Google Form</p>
+            <input type="text" id="codeInput" class="code-input" placeholder="Enter code here">
+            <button id="submitCodeBtn" class="submit-code-button" onclick="validateCode()">Submit</button>
+            <p id="errorMessage" class="error-message">Incorrect code. Please try again.</p>
+        </div>
+    </div>
+
+    <script>
+        function redirectToURL() {
+            window.location.href = "https://example.com"; // Change to your actual URL
+        }
+
+        function showCodeInput() {
+            document.getElementById("codeContainer").classList.remove("hidden");
+        }
+
+        function validateCode() {
+            let inputCode = document.getElementById("codeInput").value.trim().toLowerCase();
+            let correctCode = "yourcode"; // Change to actual code
+            let errorMessage = document.getElementById("errorMessage");
+
+            if (inputCode === correctCode) {
+                window.location.href = "https://yourdestination.com"; // Change to correct destination URL
+            } else {
+                errorMessage.style.display = "block"; // Show error message
+            }
+        }
+
+        document.getElementById("codeInput").addEventListener("input", function() {
+            let inputCode = document.getElementById("codeInput").value.trim().toLowerCase();
+            let submitBtn = document.getElementById("submitCodeBtn");
+
+            if (inputCode.length > 0) {
+                submitBtn.style.display = "inline-block"; // Show button when user starts typing
+            } else {
+                submitBtn.style.display = "none"; // Hide button if input is empty
+            }
+        });
+    </script>
+
+</body>
+</html>
