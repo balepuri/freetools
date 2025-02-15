@@ -92,7 +92,7 @@
             margin-bottom: 15px;
         }
 
-        .next-button, .review-button {
+        .next-button {
             background-color: blue;
             color: white;
             padding: 15px;
@@ -104,20 +104,9 @@
             margin-top: 20px;
             width: 50%;
             display: none;
-        }
-
-        .skip-button {
-            background-color: red;
-            color: white;
-            padding: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 50%;
-            display: none;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .submit-button {
@@ -150,11 +139,8 @@
 
     <div class="container form-container" id="formContainer">
         <h2 class="question" id="questionText"></h2>
-
         <div id="optionsContainer"></div>
-        
         <button class="next-button" id="nextButton" onclick="nextQuestion()">Next</button>
-        <button class="skip-button" id="skipButton" onclick="skipQuestion()">Tidak Mau</button>
         <button class="submit-button" id="submitButton" onclick="submitForm()">Submit</button>
     </div>
 
@@ -163,17 +149,11 @@
 
         let currentQuestion = 0;
         const formData = {};
-        let reviewClicked = false;
-
         const questions = [
             { text: "Usia Anda", type: "input", placeholder: "Tulis Disini" },
             { text: "Gender", options: ["Laki-laki", "Perempuan", "Yang lain"] },
             { text: "Status Pekerjaan", options: ["Karyawan Swasta", "Wiraswasta/Entrepreneur", "Freelancer", "Yang lain"] },
-            { text: "Rata-rata gaji pekerjaan", options: ["1jt-20jt/bulan", "20jt-50jt/bulan", "50jt-100jt/bulan", "100jt-200jt/bulan", "200jt+/bulan"] },
-            { text: "Apa yang membuat Anda ingin menginap di Bale?", options: ["Ada acara dekat lokasi", "Desain bangunan bagus", "Ada pekerjaan kantor", "Ingin konsentrasi bekerja", "Bosan di rumah", "Yang lain"] },
-            { text: "Bale sangat concern terhadap dunia karir Gen Z dan milenial... Topic mana yang menarik bagi kamu?", options: ["Cara membangun bisnis 100jt/bln", "Cara hasilkan 100jt/bln dengan skill kamu", "Cara membangun bisnis 500jt/bln", "Cara mencapai kebebasan finansial"] },
-            { text: "Maukah Anda mendapatkan update saat materi dirilis?", type: "input", placeholder: "Jika Iya, tulis No WA Kamu disini:" },
-            { text: "Review Hotel Bale Puri Disini untuk mendapatkan 4 Tools GRATIS", type: "link", url: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" }
+            { text: "Rata-rata gaji pekerjaan", options: ["1jt-20jt/bulan", "20jt-50jt/bulan", "50jt-100jt/bulan", "100jt-200jt/bulan", "200jt+/bulan"] }
         ];
 
         function startForm() {
@@ -192,8 +172,37 @@
                 inputBox.type = "text";
                 inputBox.className = "input-field";
                 inputBox.placeholder = questionObj.placeholder;
+                inputBox.id = "userInput";
                 inputBox.addEventListener("input", () => document.getElementById("nextButton").style.display = "block");
                 document.getElementById("optionsContainer").appendChild(inputBox);
+            } else {
+                questionObj.options.forEach(option => {
+                    let button = document.createElement("button");
+                    button.className = "option-button";
+                    button.innerText = option;
+                    button.onclick = () => {
+                        formData[questionObj.text] = option;
+                        nextQuestion();
+                    };
+                    document.getElementById("optionsContainer").appendChild(button);
+                });
+            }
+
+            document.getElementById("nextButton").style.display = questionObj.type === "input" ? "none" : "block";
+        }
+
+        function nextQuestion() {
+            if (questions[currentQuestion].type === "input") {
+                let inputValue = document.getElementById("userInput").value.trim();
+                if (!inputValue) return;
+                formData[questions[currentQuestion].text] = inputValue;
+            }
+
+            currentQuestion++;
+            if (currentQuestion >= questions.length) {
+                document.getElementById("formContainer").innerHTML = `<button class="submit-button" onclick="submitForm()">Submit</button>`;
+            } else {
+                loadQuestion();
             }
         }
 
