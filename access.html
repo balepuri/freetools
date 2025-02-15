@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Access Your Free Resources</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap');
+
         body {
             text-align: center;
             font-family: 'Lexend', sans-serif;
@@ -23,28 +24,32 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .headline {
-            font-size: 24px;
+        .video-heading {
+            font-size: 28px;
             font-weight: bold;
-            color: red;
-            margin-bottom: 20px;
-        }
-
-        .sub-headline {
-            font-size: 20px;
-            color: black;
-            font-weight: bold;
+            color: #FF0000;
             margin-bottom: 15px;
         }
 
-        .green-button {
+        .sub-heading {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .form-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .start-button {
             background-color: green;
             color: white;
             padding: 15px;
             font-size: 20px;
             font-weight: bold;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
             width: 100%;
         }
@@ -52,39 +57,39 @@
         .question {
             font-size: 22px;
             font-weight: bold;
-            margin-bottom: 20px;
-            display: none;
+            margin-bottom: 15px;
         }
 
-        .answer-option {
-            width: 100%;
-            padding: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 8px;
-            border: 2px solid black;
-            cursor: pointer;
+        .option-button {
             background-color: white;
-            margin-bottom: 10px;
+            border: 2px solid black;
+            font-size: 18px;
+            padding: 15px;
+            margin: 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
             text-align: left;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            transition: 0.3s;
+            align-items: center;
+            transition: background 0.3s ease-in-out;
         }
 
-        .answer-option:hover {
+        .option-button:hover {
             background-color: #ddd;
         }
 
-        .short-answer {
-            width: 100%;
-            padding: 15px;
+        .input-field {
+            width: 90%;
+            max-width: 500px;
+            padding: 10px;
             font-size: 18px;
-            border-radius: 8px;
             border: 2px solid black;
-            margin-bottom: 10px;
+            border-radius: 10px;
             text-align: center;
+            margin-bottom: 15px;
         }
 
         .next-button {
@@ -94,105 +99,117 @@
             font-size: 18px;
             font-weight: bold;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            width: 100%;
+            margin-top: 20px;
+            width: 50%;
             display: none;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        .hidden {
-            display: none;
-        }
-
-        .red-button {
-            background-color: red;
+        .submit-button {
+            background-color: blue;
             color: white;
             padding: 15px;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
             width: 100%;
+            display: none;
         }
     </style>
 </head>
 <body>
 
-    <div class="container" id="intro">
-        <h2 class="headline">Kalo Anda isi Google Form di bawah ini, Anda dapat Akses ke semua Toolsnya!</h2>
-        <h3 class="sub-headline">YUK ISI INI UNTUK DAPETIN 3 TOOLS DARIPADA 1</h3>
-        <p class="sub-headline">Apa yang Anda dapatkan setelah mengisi form ini:</p>
-        <ul style="text-align: left; font-size: 18px;">
-            <li>✅ 20K+ ChatGPT Prompts to Boost Your Work 1000x Faster</li>
-            <li>✅ 1400+ AI Tools to Boost Your Work 1000x Faster</li>
-            <li>✅ Financial Management to Stop Losing Money Every Month</li>
-        </ul>
-        <button class="green-button" onclick="startForm()">Saya Mau Tools Nya!</button>
+    <div class="container" id="introContainer">
+        <h2 class="video-heading">Kalo Anda isi form di bawah ini, Anda dapat Akses ke semua Toolsnya!</h2>
+        <h3 class="sub-heading">YUK ISI INI UNTUK DAPETIN 3 TOOLS DARIPADA 1</h3>
+        <p style="font-size: 18px; margin-bottom: 20px;">
+            Apa yang Anda dapatkan setelah mengisi form ini:
+            <br>- 20K+ ChatGPT Prompts to Boost Your Work 1000x Faster
+            <br>- 1400+ AI Tools to Boost Your Work 1000x Faster
+            <br>- Financial Management to Stop Losing Money Every Month
+        </p>
+        <button class="start-button" onclick="startForm()">Saya Mau Tools Nya!</button>
     </div>
 
-    <div class="container hidden" id="form-container">
-        <form id="quizForm">
-            <div class="question" id="q1">
-                <p>Usia Anda:</p>
-                <input type="text" class="short-answer" id="ageInput" placeholder="Tulis Disini" onfocus="showNext('nextQ1')">
-                <button type="button" class="next-button" id="nextQ1" onclick="nextQuestion(1)">Next</button>
-            </div>
-
-            <div class="question" id="q2">
-                <p>Gender:</p>
-                <button type="button" class="answer-option" onclick="selectOption(2, 'Laki-laki')">Laki-laki</button>
-                <button type="button" class="answer-option" onclick="selectOption(2, 'Perempuan')">Perempuan</button>
-            </div>
-
-            <div class="question" id="q3">
-                <p>Status Pekerjaan:</p>
-                <button type="button" class="answer-option" onclick="selectOption(3, 'Karyawan Swasta')">Karyawan Swasta</button>
-                <button type="button" class="answer-option" onclick="selectOption(3, 'Wiraswasta/Entrepreneur')">Wiraswasta/Entrepreneur</button>
-                <button type="button" class="answer-option" onclick="selectOption(3, 'Freelancer')">Freelancer</button>
-            </div>
-
-            <div class="question" id="q8">
-                <p>Review Hotel Bale Puri Disini untuk mendapatkan 4 Tools2 GRATIS</p>
-                <a href="https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" target="_blank">Klik disini untuk memberi review</a>
-                <button type="button" class="hidden next-button" id="reviewDone" onclick="nextQuestion(8)">Sudah :)</button>
-            </div>
-
-            <div class="question hidden" id="submit-page">
-                <button type="submit" class="next-button">Submit</button>
-            </div>
-        </form>
+    <div class="container form-container" id="formContainer">
+        <h2 class="question" id="questionText"></h2>
+        <div id="optionsContainer"></div>
+        <button class="next-button" id="nextButton" onclick="nextQuestion()">Next</button>
+        <button class="submit-button" id="submitButton" onclick="submitForm()">Submit</button>
     </div>
 
     <script>
+        const scriptURL = "https://script.google.com/macros/s/AKfycbyYcFecT4xDaH00wEsrSF7hWzXi2LJvcbGNRQ0-96ONtp2hHhiKNrxoqHNkA3m9nFxJ/exec";
+
+        let currentQuestion = 0;
+        const formData = {};
+        const questions = [
+            { text: "Usia Anda", type: "input", placeholder: "Tulis Disini" },
+            { text: "Gender", options: ["Laki-laki", "Perempuan", "Yang lain"] },
+            { text: "Status Pekerjaan", options: ["Karyawan Swasta", "Wiraswasta/Entrepreneur", "Freelancer", "Yang lain"] },
+            { text: "Rata-rata gaji pekerjaan", options: ["1jt-20jt/bulan", "20jt-50jt/bulan", "50jt-100jt/bulan", "100jt-200jt/bulan", "200jt+/bulan"] }
+        ];
+
         function startForm() {
-            document.getElementById("intro").classList.add("hidden");
-            document.getElementById("form-container").classList.remove("hidden");
-            document.getElementById("q1").classList.remove("hidden");
+            document.getElementById("introContainer").style.display = "none";
+            document.getElementById("formContainer").style.display = "block";
+            loadQuestion();
         }
 
-        function showNext(buttonId) {
-            document.getElementById(buttonId).style.display = "block";
+        function loadQuestion() {
+            const questionObj = questions[currentQuestion];
+            document.getElementById("questionText").textContent = questionObj.text;
+            document.getElementById("optionsContainer").innerHTML = "";
+
+            if (questionObj.type === "input") {
+                let inputBox = document.createElement("input");
+                inputBox.type = "text";
+                inputBox.className = "input-field";
+                inputBox.placeholder = questionObj.placeholder;
+                inputBox.id = "userInput";
+                inputBox.addEventListener("input", () => document.getElementById("nextButton").style.display = "block");
+                document.getElementById("optionsContainer").appendChild(inputBox);
+            } else {
+                questionObj.options.forEach(option => {
+                    let button = document.createElement("button");
+                    button.className = "option-button";
+                    button.innerText = option;
+                    button.onclick = () => {
+                        formData[questionObj.text] = option;
+                        nextQuestion();
+                    };
+                    document.getElementById("optionsContainer").appendChild(button);
+                });
+            }
+
+            document.getElementById("nextButton").style.display = questionObj.type === "input" ? "none" : "block";
         }
 
-        function nextQuestion(current) {
-            document.getElementById("q" + current).classList.add("hidden");
-            document.getElementById("q" + (current + 1)).classList.remove("hidden");
+        function nextQuestion() {
+            if (questions[currentQuestion].type === "input") {
+                let inputValue = document.getElementById("userInput").value.trim();
+                if (!inputValue) return;
+                formData[questions[currentQuestion].text] = inputValue;
+            }
+
+            currentQuestion++;
+            if (currentQuestion >= questions.length) {
+                document.getElementById("formContainer").innerHTML = `<button class="submit-button" onclick="submitForm()">Submit</button>`;
+            } else {
+                loadQuestion();
+            }
         }
 
-        function selectOption(question, value) {
-            nextQuestion(question);
+        function submitForm() {
+            fetch(scriptURL, { method: "POST", body: new URLSearchParams(formData) });
+            window.location.href = "https://balepuri.github.io/unlockedfree/";
         }
-
-        document.getElementById("quizForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            const scriptURL = "https://script.google.com/macros/s/AKfycbyYcFecT4xDaH00wEsrSF7hWzXi2LJvcbGNRQ0-96ONtp2hHhiKNrxoqHNkA3m9nFxJ/exec";
-            fetch(scriptURL, { method: "POST", body: new FormData(this) })
-                .then(response => {
-                    window.location.href = "https://balepuri.github.io/unlockedfree/";
-                })
-                .catch(error => console.error("Error!", error.message));
-        });
     </script>
 
 </body>
