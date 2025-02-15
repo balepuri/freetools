@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Access Your Free Resources</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;700&display=swap');
-
         body {
             text-align: center;
             font-family: 'Lexend', sans-serif;
@@ -28,49 +27,63 @@
             font-size: 24px;
             font-weight: bold;
             color: red;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .sub-headline {
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 20px;
             color: black;
-            margin-bottom: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .green-button {
+            background-color: green;
+            color: white;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
         }
 
         .question {
             font-size: 22px;
             font-weight: bold;
-            color: black;
             margin-bottom: 20px;
+            display: none;
         }
 
-        .answer-button {
+        .answer-option {
             width: 100%;
             padding: 15px;
             font-size: 18px;
             font-weight: bold;
-            border: 2px solid #000;
-            border-radius: 10px;
+            border-radius: 8px;
+            border: 2px solid black;
             cursor: pointer;
-            margin-bottom: 10px;
             background-color: white;
+            margin-bottom: 10px;
+            text-align: left;
             display: flex;
             align-items: center;
             justify-content: space-between;
             transition: 0.3s;
         }
 
-        .answer-button:hover {
+        .answer-option:hover {
             background-color: #ddd;
         }
 
-        .answer-input {
+        .short-answer {
             width: 100%;
-            padding: 12px;
+            padding: 15px;
             font-size: 18px;
-            border: 2px solid #000;
-            border-radius: 10px;
+            border-radius: 8px;
+            border: 2px solid black;
+            margin-bottom: 10px;
             text-align: center;
         }
 
@@ -85,107 +98,102 @@
             cursor: pointer;
             width: 100%;
             display: none;
-            margin-top: 20px;
-        }
-
-        .green-button {
-            background-color: green;
-        }
-
-        .red-button {
-            background-color: red;
-        }
-
-        .blue-button {
-            background-color: blue;
         }
 
         .hidden {
             display: none;
         }
 
-        .fade {
-            animation: fadeEffect 0.5s;
-        }
-
-        @keyframes fadeEffect {
-            from {opacity: 0;}
-            to {opacity: 1;}
-        }
-
-        .review-link {
-            color: blue;
+        .red-button {
+            background-color: red;
+            color: white;
+            padding: 15px;
+            font-size: 18px;
             font-weight: bold;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
-            text-decoration: underline;
+            width: 100%;
         }
-
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2 class="headline">Kalo Anda isi Form ini, Anda dapat Akses ke semua Toolsnya!</h2>
+    <div class="container" id="intro">
+        <h2 class="headline">Kalo Anda isi Google Form di bawah ini, Anda dapat Akses ke semua Toolsnya!</h2>
         <h3 class="sub-headline">YUK ISI INI UNTUK DAPETIN 3 TOOLS DARIPADA 1</h3>
-        <p>Apa yang Anda dapatkan setelah mengisi form ini:</p>
-        <ul style="text-align: left;">
-            <li>✔️ 20K+ ChatGPT Prompts to Boost Your Work 1000x Faster</li>
-            <li>✔️ 1400+ AI Tools to Boost Your Work 1000x Faster</li>
-            <li>✔️ Financial Management to Stop Losing Money Every Month</li>
+        <p class="sub-headline">Apa yang Anda dapatkan setelah mengisi form ini:</p>
+        <ul style="text-align: left; font-size: 18px;">
+            <li>✅ 20K+ ChatGPT Prompts to Boost Your Work 1000x Faster</li>
+            <li>✅ 1400+ AI Tools to Boost Your Work 1000x Faster</li>
+            <li>✅ Financial Management to Stop Losing Money Every Month</li>
         </ul>
+        <button class="green-button" onclick="startForm()">Saya Mau Tools Nya!</button>
+    </div>
 
-        <button class="green-button next-button" id="startBtn" onclick="startForm()">Saya Mau Tools Nya!</button>
+    <div class="container hidden" id="form-container">
+        <form id="quizForm">
+            <div class="question" id="q1">
+                <p>Usia Anda:</p>
+                <input type="text" class="short-answer" id="ageInput" placeholder="Tulis Disini" onfocus="showNext('nextQ1')">
+                <button type="button" class="next-button" id="nextQ1" onclick="nextQuestion(1)">Next</button>
+            </div>
 
-        <form id="surveyForm" class="hidden">
-            <div id="questionContainer"></div>
-            <button type="submit" id="submitBtn" class="hidden blue-button next-button">Submit</button>
+            <div class="question" id="q2">
+                <p>Gender:</p>
+                <button type="button" class="answer-option" onclick="selectOption(2, 'Laki-laki')">Laki-laki</button>
+                <button type="button" class="answer-option" onclick="selectOption(2, 'Perempuan')">Perempuan</button>
+            </div>
+
+            <div class="question" id="q3">
+                <p>Status Pekerjaan:</p>
+                <button type="button" class="answer-option" onclick="selectOption(3, 'Karyawan Swasta')">Karyawan Swasta</button>
+                <button type="button" class="answer-option" onclick="selectOption(3, 'Wiraswasta/Entrepreneur')">Wiraswasta/Entrepreneur</button>
+                <button type="button" class="answer-option" onclick="selectOption(3, 'Freelancer')">Freelancer</button>
+            </div>
+
+            <div class="question" id="q8">
+                <p>Review Hotel Bale Puri Disini untuk mendapatkan 4 Tools2 GRATIS</p>
+                <a href="https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" target="_blank">Klik disini untuk memberi review</a>
+                <button type="button" class="hidden next-button" id="reviewDone" onclick="nextQuestion(8)">Sudah :)</button>
+            </div>
+
+            <div class="question hidden" id="submit-page">
+                <button type="submit" class="next-button">Submit</button>
+            </div>
         </form>
     </div>
 
     <script>
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyYcFecT4xDaH00wEsrSF7hWzXi2LJvcbGNRQ0-96ONtp2hHhiKNrxoqHNkA3m9nFxJ/exec"; 
-
-        const questions = [
-            { type: "text", question: "Usia Anda", placeholder: "Tulis Disini" },
-            { type: "options", question: "Gender", options: ["Laki-laki", "Perempuan"], other: true },
-            { type: "options", question: "Status pekerjaan", options: ["Karyawan Swasta", "Wiraswasta/Entrepreneur", "Freelancer"], other: true },
-            { type: "options", question: "Rata-rata gaji pekerjaan", options: ["1jt-20jt/bulan", "20jt-50jt/bulan", "50jt-100jt/bulan", "100jt-200jt/bulan", "200jt+/bulan"] },
-            { type: "options", question: "Apa yang membuat Anda ingin menginap di Bale?", options: ["Ada acara dekat lokasi", "Desain bangunan bagus", "Ada pekerjaan kantor", "Ingin konsentrasi bekerja", "Bosan di rumah"], other: true },
-            { type: "options", question: "Bale sangat concern terhadap dunia karir Gen Z dan milenial, dan kami ingin memberikan sumbangsi berupa materi untuk perkembangan tersebut.\n\nTopic mana dibawah ini yang sekiranya menarik bagi kamu:", options: ["Cara kamu bisa membangun bisnis 100jt/bln", "Cara menghasilkan 100jt/bln dengan skill yang sudah kamu punyai", "Cara kita membangun bisnis 500jt/bln", "Cara mencapai kebebasan finansial di dunia karir dan bisnis"] },
-            { type: "text", question: "Jika Iya, tulis No WA Kamu disini:", placeholder: "Tulis Disini", optional: true, button: "Tidak Mau" },
-            { type: "review", question: "Review Hotel Bale Puri Disini untuk mendapatkan 4 Tools2 GRATIS", link: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" }
-        ];
-
         function startForm() {
-            document.getElementById("startBtn").style.display = "none";
-            document.getElementById("surveyForm").classList.remove("hidden");
-            showQuestion(0);
+            document.getElementById("intro").classList.add("hidden");
+            document.getElementById("form-container").classList.remove("hidden");
+            document.getElementById("q1").classList.remove("hidden");
         }
 
-        function showQuestion(index) {
-            if (index >= questions.length) {
-                document.getElementById("submitBtn").classList.remove("hidden");
-                return;
-            }
-
-            const q = questions[index];
-            let content = `<h3 class="question fade">${q.question}</h3>`;
-
-            if (q.type === "text") {
-                content += `<input type="text" class="answer-input fade" id="answer${index}" placeholder="${q.placeholder}" required>`;
-                if (q.optional) {
-                    content += `<button type="button" class="red-button next-button" onclick="nextQuestion(${index}, 'Tidak diisi')">${q.button}</button>`;
-                }
-            } else if (q.type === "options") {
-                q.options.forEach(opt => {
-                    content += `<button type="button" class="answer-button fade" onclick="nextQuestion(${index}, '${opt}')">${opt}</button>`;
-                });
-            } else if (q.type === "review") {
-                content += `<a href="${q.link}" target="_blank" class="review-link" onclick="enableReview(${index})">${q.link}</a>`;
-                content += `<button type="button" id="reviewBtn" class="hidden green-button next-button" onclick="nextQuestion(${index}, 'Sudah :)')">Sudah :)</button>`;
-            }
-
-            document.getElementById("questionContainer").innerHTML = content;
+        function showNext(buttonId) {
+            document.getElementById(buttonId).style.display = "block";
         }
 
-        function n
+        function nextQuestion(current) {
+            document.getElementById("q" + current).classList.add("hidden");
+            document.getElementById("q" + (current + 1)).classList.remove("hidden");
+        }
+
+        function selectOption(question, value) {
+            nextQuestion(question);
+        }
+
+        document.getElementById("quizForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const scriptURL = "https://script.google.com/macros/s/AKfycbyYcFecT4xDaH00wEsrSF7hWzXi2LJvcbGNRQ0-96ONtp2hHhiKNrxoqHNkA3m9nFxJ/exec";
+            fetch(scriptURL, { method: "POST", body: new FormData(this) })
+                .then(response => {
+                    window.location.href = "https://balepuri.github.io/unlockedfree/";
+                })
+                .catch(error => console.error("Error!", error.message));
+        });
+    </script>
+
+</body>
+</html>
