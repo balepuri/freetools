@@ -123,13 +123,17 @@
             display: none;
         }
 
-        .review-link {
+        .red-button {
+            background-color: red;
+            color: white;
+            padding: 15px;
             font-size: 18px;
-            color: blue;
-            text-decoration: underline;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
             cursor: pointer;
-            display: inline-block;
-            margin-bottom: 20px;
+            width: 50%;
+            margin-top: 10px;
         }
 
     </style>
@@ -162,7 +166,6 @@
 
         let currentQuestion = 0;
         const formData = {};
-        let reviewClicked = false;
 
         const questions = [
             { text: "Usia Anda", type: "input", placeholder: "Tulis Disini" },
