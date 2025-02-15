@@ -69,13 +69,14 @@
             cursor: pointer;
             border-radius: 8px;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             width: 90%;
             max-width: 500px;
             margin-left: auto;
             margin-right: auto;
             transition: background 0.3s ease-in-out;
+            text-align: center;
         }
 
         .option-button:hover {
@@ -110,7 +111,7 @@
         }
 
         .submit-button {
-            background-color: red;
+            background-color: blue;
             color: white;
             padding: 15px;
             font-size: 20px;
@@ -120,6 +121,15 @@
             cursor: pointer;
             width: 100%;
             display: none;
+        }
+
+        .review-link {
+            font-size: 18px;
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
+            display: inline-block;
+            margin-bottom: 20px;
         }
 
     </style>
@@ -152,6 +162,7 @@
 
         let currentQuestion = 0;
         const formData = {};
+        let reviewClicked = false;
 
         const questions = [
             { text: "Usia Anda", type: "input", placeholder: "Tulis Disini" },
@@ -159,8 +170,8 @@
             { text: "Status Pekerjaan", options: ["Karyawan Swasta", "Wiraswasta/Entrepreneur", "Freelancer", "Yang lain"] },
             { text: "Rata-rata gaji pekerjaan", options: ["1jt-20jt/bulan", "20jt-50jt/bulan", "50jt-100jt/bulan", "100jt-200jt/bulan", "200jt+/bulan"] },
             { text: "Apa yang membuat Anda ingin menginap di Bale?", options: ["Ada acara dekat lokasi", "Desain bangunan bagus", "Ada pekerjaan kantor", "Ingin konsentrasi bekerja", "Bosan di rumah", "Yang lain"] },
-            { text: "Topic mana dibawah ini yang menarik bagi kamu?", options: ["Cara kamu bisa membangun bisnis 100jt/bln", "Cara menghasilkan 100jt/bln dengan skill yang sudah kamu punyai", "Cara kita membangun bisnis 500jt/bln", "Cara mencapai kebebasan finansial di dunia karir dan bisnis"] },
-            { text: "Maukah Anda mendapatkan update saat materi di release?", type: "input", placeholder: "Tulis No WA Disini", extraOption: "Tidak Mau" },
+            { text: "Bale sangat concern terhadap dunia karir Gen Z dan milenial, dan kami ingin memberikan sumbangsi berupa materi untuk perkembangan tersebut.\n\nTopic mana dibawah ini yang sekiranya menarik bagi kamu?", options: ["Cara kamu bisa membangun bisnis 100jt/bln", "Cara menghasilkan 100jt/bln dengan skill yang sudah kamu punyai", "Cara kita membangun bisnis 500jt/bln", "Cara mencapai kebebasan finansial di dunia karir dan bisnis"] },
+            { text: "Maukah Anda mendapatkan update saat materi di release?", type: "input", placeholder: "Jika Iya, tulis No WA Kamu disini:", extraOption: "Tidak Mau" },
             { text: "Review Hotel Bale Puri Disini untuk mendapatkan 4 Tools GRATIS", type: "link", url: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" }
         ];
 
@@ -173,41 +184,15 @@
         function loadQuestion() {
             const questionObj = questions[currentQuestion];
             document.getElementById("questionText").textContent = questionObj.text;
-            const optionsContainer = document.getElementById("optionsContainer");
-            optionsContainer.innerHTML = "";
+            document.getElementById("optionsContainer").innerHTML = "";
 
             if (questionObj.type === "input") {
                 const inputField = document.createElement("input");
                 inputField.type = "text";
                 inputField.placeholder = questionObj.placeholder;
                 inputField.classList.add("input-field");
-                inputField.addEventListener("keyup", (e) => {
-                    if (e.key === "Enter") nextQuestion();
-                });
-                optionsContainer.appendChild(inputField);
-                document.getElementById("nextButton").style.display = "block";
-            } else {
-                questionObj.options.forEach(option => {
-                    const button = document.createElement("button");
-                    button.classList.add("option-button");
-                    button.textContent = option;
-                    button.onclick = () => selectAnswer(option);
-                    optionsContainer.appendChild(button);
-                });
-            }
-        }
-
-        function selectAnswer(answer) {
-            formData[questions[currentQuestion].text] = answer;
-            nextQuestion();
-        }
-
-        function nextQuestion() {
-            currentQuestion++;
-            if (currentQuestion < questions.length) {
-                loadQuestion();
-            } else {
-                document.getElementById("submitButton").style.display = "block";
+                inputField.addEventListener("input", () => document.getElementById("nextButton").style.display = "block");
+                document.getElementById("optionsContainer").appendChild(inputField);
             }
         }
 
@@ -217,4 +202,5 @@
         }
     </script>
 
-<
+</body>
+</html>
