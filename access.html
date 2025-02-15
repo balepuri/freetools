@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Access Your Free Resources</title>
+  <!-- Preconnect and Import Lexend Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Importing Lexend font -->
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet">
   <style>
     /* Base Styles */
@@ -17,8 +17,7 @@
       font-family: 'Lexend', sans-serif;
       text-align: center;
     }
-    
-    /* Container for Intro and Form */
+    /* Container for Intro & Form */
     .container {
       max-width: 600px;
       margin: 30px auto;
@@ -29,14 +28,12 @@
       opacity: 0;
       animation: fadeIn 0.6s forwards;
     }
-    
-    /* Fade in effect */
+    /* Fade In Effect */
     @keyframes fadeIn {
       from { opacity: 0; }
       to { opacity: 1; }
     }
-    
-    /* Headline styles */
+    /* Headline Styles */
     .headline1 {
       font-size: 28px;
       font-weight: bold;
@@ -48,15 +45,13 @@
       font-weight: bold;
       margin-bottom: 20px;
     }
-    
-    /* Description text */
+    /* Description Text */
     .description {
       font-size: 16px;
       line-height: 1.5;
       margin-bottom: 20px;
     }
-    
-    /* Button styles */
+    /* Button Styles */
     .start-button,
     .next-button,
     .submit-button,
@@ -66,36 +61,31 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      margin: 10px 0;
+      margin: 10px auto;
       padding: 15px;
       width: 90%;
       max-width: 500px;
       transition: background 0.3s ease;
       font-size: 18px;
       display: block;
-      margin-left: auto;
-      margin-right: auto;
     }
-    
     .start-button {
       background-color: green;
       color: white;
       font-weight: bold;
     }
-    
     .next-button,
-    .submit-button {
+    .submit-button,
+    .sudah-button {
       background-color: blue;
       color: white;
       font-weight: bold;
     }
-    
     .tidak-button {
       background-color: red;
       color: white;
       font-weight: bold;
     }
-    
     .option-button {
       background-color: white;
       border: 2px solid #000;
@@ -106,12 +96,10 @@
       max-width: 500px;
       text-align: center;
     }
-    
     .option-button:hover {
       background-color: #ddd;
     }
-    
-    /* Input field styling */
+    /* Input Field Styling */
     .input-field {
       width: 90%;
       max-width: 500px;
@@ -123,13 +111,11 @@
       display: block;
       text-align: center;
     }
-    
-    /* Hide elements by default */
+    /* Hide Elements by Default */
     .hidden {
       display: none;
     }
-    
-    /* Link styling */
+    /* Link Styling */
     .review-link {
       font-size: 18px;
       color: blue;
@@ -138,8 +124,7 @@
       display: inline-block;
       margin: 20px 0;
     }
-    
-    /* Extra spacing for clarity */
+    /* Extra Spacer */
     .spacer {
       margin-top: 20px;
     }
@@ -162,7 +147,6 @@
   <!-- Form Section (hidden until start) -->
   <div class="container hidden" id="formContainer">
     <div id="questionContainer">
-      <!-- Question text will appear here -->
       <div id="questionText" class="headline2"></div>
     </div>
     <div id="optionsContainer">
@@ -170,7 +154,7 @@
     </div>
     <!-- Next Button for input-based questions -->
     <button class="next-button hidden" id="nextButton" onclick="nextQuestion()">Next</button>
-    <!-- Submit Button appears after last question -->
+    <!-- Submit Button (appears after Q8 is completed) -->
     <button class="submit-button hidden" id="submitButton" onclick="submitForm()">Submit</button>
   </div>
   
@@ -180,181 +164,112 @@
      * Global Variables and Configurations *
      ***************************************/
     
-    // Google Apps Script URL to send form data to Google Sheets
+    // Your Google Apps Script web app URL
     const scriptURL = "https://script.google.com/macros/s/AKfycbyYcFecT4xDaH00wEsrSF7hWzXi2LJvcbGNRQ0-96ONtp2hHhiKNrxoqHNkA3m9nFxJ/exec";
     
     // Object to store collected answers
     let formData = {};
-    
     // Current question index
     let currentQuestion = 0;
     
-    // Define our questions array with types and options
+    // Questions Array (with explicit field names to map to your Google Sheet columns)
     const questions = [
-      // Q1: Input for "Usia Anda"
-      {
-        text: "Usia Anda",
-        type: "input",
-        placeholder: "Tulis Disini"
-      },
-      // Q2: Multiple Choice for "Gender"
-      {
-        text: "Gender",
-        type: "multiple",
-        options: ["Laki-laki", "Perempuan", "Yang lain"]
-      },
-      // Q3: Multiple Choice for "Status Pekerjaan"
-      {
-        text: "Status Pekerjaan",
-        type: "multiple",
-        options: ["Karyawan Swasta", "Wiraswasta/Entrepreneur", "Freelancer", "Yang lain"]
-      },
-      // Q4: Multiple Choice for "Rata-rata gaji pekerjaan"
-      {
-        text: "Rata-rata gaji pekerjaan",
-        type: "multiple",
-        options: ["1jt-20jt/bulan", "20jt-50jt/bulan", "50jt-100jt/bulan", "100jt-200jt/bulan", "200jt+/bulan"]
-      },
-      // Q5: Multiple Choice for "Apa yang membuat Anda ingin menginap di Bale?"
-      {
-        text: "Apa yang membuat Anda ingin menginap di Bale?",
-        type: "multiple",
-        options: ["Ada acara dekat lokasi", "Desain bangunan bagus", "Ada pekerjaan kantor", "Ingin konsentrasi bekerja", "Bosan di rumah", "Yang lain"]
-      },
-      // Q6: Multiple Choice for Topic question (with long text)
-      {
-        text: "Bale sangat concern terhadap dunia karir Gen Z dan milenial, dan kami ingin memberikan sumbangsi berupa materi untuk perkembangan tersebut. Topic mana dibawah ini yang sekiranya menarik bagi kamu?",
-        type: "multiple",
-        options: [
-          "Cara kamu bisa membangun bisnis 100jt/bln", 
-          "Cara menghasilkan 100jt/bln dengan skill yang sudah kamu punyai", 
-          "Cara kita membangun bisnis 500jt/bln", 
-          "Cara mencapai kebebasan finansial di dunia karir dan bisnis"
-        ]
-      },
-      // Q7: Special WA update question with input and a "Tidak Mau" option
-      {
-        text: "Maukah Anda mendapatkan update saat materi di release?",
-        type: "wa",
-        placeholder: "Jika Iya, tulis No WA Kamu disini:"
-      },
-      // Q8: Review Link question
-      {
-        text: "Review Hotel Bale Puri Disini untuk mendapatkan 4 Tools GRATIS",
-        type: "review",
-        url: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY"
-      }
+      { field: "usia", text: "Usia Anda", type: "input", placeholder: "Tulis Disini" },
+      { field: "gender", text: "Gender", type: "multiple", options: ["Laki-laki", "Perempuan", "Yang lain"] },
+      { field: "pekerjaan", text: "Status Pekerjaan", type: "multiple", options: ["Karyawan Swasta", "Wiraswasta/Entrepreneur", "Freelancer", "Yang lain"] },
+      { field: "gaji", text: "Rata-rata gaji pekerjaan", type: "multiple", options: ["1jt-20jt/bulan", "20jt-50jt/bulan", "50jt-100jt/bulan", "100jt-200jt/bulan", "200jt+/bulan"] },
+      { field: "alasan", text: "Apa yang membuat Anda ingin menginap di Bale?", type: "multiple", options: ["Ada acara dekat lokasi", "Desain bangunan bagus", "Ada pekerjaan kantor", "Ingin konsentrasi bekerja", "Bosan di rumah", "Yang lain"] },
+      { field: "topik", text: "Bale sangat concern terhadap dunia karir Gen Z dan milenial, dan kami ingin memberikan sumbangsi berupa materi untuk perkembangan tersebut. Topic mana dibawah ini yang sekiranya menarik bagi kamu?", type: "multiple", options: ["Cara kamu bisa membangun bisnis 100jt/bln", "Cara menghasilkan 100jt/bln dengan skill yang sudah kamu punyai", "Cara kita membangun bisnis 500jt/bln", "Cara mencapai kebebasan finansial di dunia karir dan bisnis"] },
+      { field: "wa", text: "Maukah Anda mendapatkan update saat materi di release?", type: "wa", placeholder: "Jika Iya, tulis No WA Kamu disini:" },
+      { field: "review", text: "Review Hotel Bale Puri Disini untuk mendapatkan 4 Tools GRATIS", type: "review", url: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" }
     ];
     
     /*******************************
      * Functions for Form Control  *
      *******************************/
     
-    // Function to start the form: Hide intro and show form container with fade effect
+    // Start Form: Hide intro and show the form container
     function startForm() {
       document.getElementById("introContainer").classList.add("hidden");
-      const formContainer = document.getElementById("formContainer");
-      formContainer.classList.remove("hidden");
+      document.getElementById("formContainer").classList.remove("hidden");
       currentQuestion = 0;
       formData = {}; // Reset data
       loadQuestion();
     }
     
-    // Function to load a question based on currentQuestion index
+    // Load the current question based on currentQuestion index
     function loadQuestion() {
-      // Clear previous options and buttons
       const questionTextEl = document.getElementById("questionText");
       const optionsContainer = document.getElementById("optionsContainer");
       const nextButton = document.getElementById("nextButton");
       const submitButton = document.getElementById("submitButton");
+      
+      // Hide Next and Submit buttons for each new question
       nextButton.classList.add("hidden");
       submitButton.classList.add("hidden");
       optionsContainer.innerHTML = "";
       
-      // Get current question object
+      // Get the current question object
       const questionObj = questions[currentQuestion];
-      
-      // Set question text with fade-in effect
       questionTextEl.textContent = questionObj.text;
       questionTextEl.style.opacity = 0;
       setTimeout(() => { questionTextEl.style.opacity = 1; }, 100);
       
       // Handle question types
       if (questionObj.type === "input") {
-        // Create input field for Q1
+        // Q1 (Input)
         const inputField = document.createElement("input");
         inputField.type = "text";
         inputField.placeholder = questionObj.placeholder;
         inputField.className = "input-field";
-        // Prevent Enter key from bypassing without input
+        // Prevent Enter key from skipping without input
         inputField.addEventListener("keydown", function(e) {
           if (e.key === "Enter") {
-            if (this.value.trim() === "") {
-              e.preventDefault();
-            } else {
-              // Do nothing, wait for user to click Next
-              e.preventDefault();
-            }
+            if (this.value.trim() === "") e.preventDefault();
+            else e.preventDefault();
           }
         });
-        // Show Next button only when input is focused and has some text
+        // Show Next button only when there is text
         inputField.addEventListener("input", function() {
-          if (this.value.trim() !== "") {
-            nextButton.classList.remove("hidden");
-          } else {
-            nextButton.classList.add("hidden");
-          }
+          if (this.value.trim() !== "") nextButton.classList.remove("hidden");
+          else nextButton.classList.add("hidden");
         });
-        // Also show Next button on focus if there is already content
         inputField.addEventListener("focus", function() {
-          if (this.value.trim() !== "") {
-            nextButton.classList.remove("hidden");
-          }
+          if (this.value.trim() !== "") nextButton.classList.remove("hidden");
         });
         optionsContainer.appendChild(inputField);
       
       } else if (questionObj.type === "multiple") {
-        // For multiple choice, create a button for each option
+        // Multiple Choice Questions (Q2, Q3, Q4, Q5, Q6)
         questionObj.options.forEach(option => {
           const btn = document.createElement("button");
           btn.className = "option-button";
           btn.textContent = option;
-          // Ensure text is centered
           btn.style.textAlign = "center";
-          // On click, check if "Yang lain" is selected
           btn.addEventListener("click", function() {
             if (option === "Yang lain") {
-              // Clear options container and show an input field for extra text
+              // Clear options and show an input for extra text
               optionsContainer.innerHTML = "";
               const extraInput = document.createElement("input");
               extraInput.type = "text";
               extraInput.placeholder = "Tulis Disini";
               extraInput.className = "input-field";
+              extraInput.dataset.isExtra = "true";
               extraInput.addEventListener("keydown", function(e) {
                 if (e.key === "Enter") {
-                  if (this.value.trim() === "") {
-                    e.preventDefault();
-                  } else {
-                    // Do nothing, wait for Next button click
-                    e.preventDefault();
-                  }
+                  if (this.value.trim() === "") e.preventDefault();
+                  else e.preventDefault();
                 }
               });
               extraInput.addEventListener("input", function() {
-                if (this.value.trim() !== "") {
-                  nextButton.classList.remove("hidden");
-                } else {
-                  nextButton.classList.add("hidden");
-                }
+                if (this.value.trim() !== "") nextButton.classList.remove("hidden");
+                else nextButton.classList.add("hidden");
               });
               optionsContainer.appendChild(extraInput);
               nextButton.classList.add("hidden");
-              
-              // Store a flag that we are collecting extra data
-              extraInput.dataset.isExtra = "true";
             } else {
-              // For a normal option, store answer and proceed immediately
-              formData[questionObj.text] = option;
+              // Record answer and immediately move to next question
+              formData[questionObj.field] = option;
               currentQuestion++;
               loadQuestion();
             }
@@ -363,138 +278,117 @@
         });
       
       } else if (questionObj.type === "wa") {
-        // Q7: Special case with input and a "Tidak Mau" button
-        // Create input field first
+        // Q7: WA Update Question (Input + "Tidak Mau" option)
         const waInput = document.createElement("input");
         waInput.type = "text";
         waInput.placeholder = questionObj.placeholder;
         waInput.className = "input-field";
-        // Prevent Enter key bypass
         waInput.addEventListener("keydown", function(e) {
           if (e.key === "Enter") {
-            if (this.value.trim() === "") {
-              e.preventDefault();
-            } else {
-              e.preventDefault();
-            }
+            if (this.value.trim() === "") e.preventDefault();
+            else e.preventDefault();
           }
         });
-        // Create a red "Tidak Mau" button
+        // Create red "Tidak Mau" button
         const tidakBtn = document.createElement("button");
         tidakBtn.className = "tidak-button";
         tidakBtn.textContent = "Tidak Mau";
         tidakBtn.addEventListener("click", function() {
-          // Store answer as "Tidak diisi" and move to next question
-          formData[questionObj.text] = "Tidak diisi";
+          formData[questionObj.field] = "Tidak diisi";
           currentQuestion++;
           loadQuestion();
         });
-        // When the user clicks the input field, remove "Tidak Mau" and show blue "Next" button
+        // When input is focused or has text, show Next button and hide "Tidak Mau"
         waInput.addEventListener("focus", function() {
           tidakBtn.classList.add("hidden");
           nextButton.classList.remove("hidden");
         });
-        // Also, show Next button when input has text
         waInput.addEventListener("input", function() {
-          if (this.value.trim() !== "") {
-            nextButton.classList.remove("hidden");
-          } else {
-            nextButton.classList.add("hidden");
-          }
+          if (this.value.trim() !== "") nextButton.classList.remove("hidden");
+          else nextButton.classList.add("hidden");
         });
         optionsContainer.appendChild(waInput);
         optionsContainer.appendChild(tidakBtn);
       
       } else if (questionObj.type === "review") {
-        // Q8: Special review link question
-        // Create a clickable link element
+        // Q8: Review Link Question
         const reviewLink = document.createElement("a");
         reviewLink.href = questionObj.url;
         reviewLink.target = "_blank";
         reviewLink.textContent = "Klik Disini untuk Review";
         reviewLink.className = "review-link";
-        // Append the link
         optionsContainer.appendChild(reviewLink);
         
-        // Create a button that appears only AFTER the link is clicked
+        // "Sudah :)" button (styled blue)
         const sudahButton = document.createElement("button");
         sudahButton.className = "sudah-button hidden";
         sudahButton.textContent = "Sudah :)";
+        // When clicked, record answer and reveal the Submit button
         sudahButton.addEventListener("click", function() {
-          // Record that review step is complete and move on
-          formData[questionObj.text] = "Review Selesai";
-          currentQuestion++;
-          loadQuestion();
+          formData[questionObj.field] = "Review Selesai";
+          document.getElementById("submitButton").classList.remove("hidden");
         });
         optionsContainer.appendChild(sudahButton);
         
-        // When the review link is clicked, show the "Sudah :)" button after a short delay
+        // Show the "Sudah :)" button shortly after the link is clicked
         reviewLink.addEventListener("click", function() {
           setTimeout(function() {
             sudahButton.classList.remove("hidden");
           }, 300);
         });
       }
-      
-      // For questions that require an extra input (from a "Yang lain" option),
-      // if an extra input field exists, attach the Next button event listener.
-      // (The Next button for input types and extra inputs calls nextQuestion.)
     }
     
-    // Function to move to next question, also storing input data if needed
+    // Proceed to Next Question for input-based types (including extra inputs)
     function nextQuestion() {
       const questionObj = questions[currentQuestion];
       const optionsContainer = document.getElementById("optionsContainer");
       const nextButton = document.getElementById("nextButton");
       
-      // For input types (including extra input from "Yang lain" or Q7 input)
       if (questionObj.type === "input" || questionObj.type === "wa") {
         const inputEl = optionsContainer.querySelector("input");
         if (inputEl && inputEl.value.trim() !== "") {
-          formData[questionObj.text] = inputEl.value.trim();
+          formData[questionObj.field] = inputEl.value.trim();
         }
       }
-      // For extra input in multiple choice questions
+      // Check for extra input in multiple choice ("Yang lain")
       if (questionObj.type === "multiple") {
-        // Check if an extra input exists (from a "Yang lain" option)
         const extraInput = optionsContainer.querySelector("input[data-isExtra='true']");
         if (extraInput && extraInput.value.trim() !== "") {
-          formData[questionObj.text] = extraInput.value.trim();
+          formData[questionObj.field] = extraInput.value.trim();
         }
       }
       
-      // Move to the next question
       currentQuestion++;
-      
-      // If there are no more questions, show the Submit button
-      if (currentQuestion >= questions.length) {
-        document.getElementById("optionsContainer").innerHTML = "";
-        document.getElementById("questionText").textContent = "";
-        document.getElementById("nextButton").classList.add("hidden");
-        document.getElementById("submitButton").classList.remove("hidden");
-      } else {
+      // If not the last question, load the next question
+      if (currentQuestion < questions.length) {
         loadQuestion();
+      } else {
+        // For Q8, we want the question to remain visible (Submit button is revealed via "Sudah :)")
+        // So we do not call loadQuestion() here.
       }
     }
     
-    // Function to submit form data to Google Sheets and redirect user
+    // Submit the form data to Google Sheets via your Apps Script
     function submitForm() {
-      // Send data using fetch and URLSearchParams
-      fetch(scriptURL, { method: "POST", body: new URLSearchParams(formData) })
-        .then(response => {
-          // On success, redirect to the provided link
-          window.location.href = "https://balepuri.github.io/unlockedfree/";
-        })
-        .catch(error => console.error("Error!", error.message));
+      // Send data as JSON so that the Apps Script (Code.gs) can parse it
+      fetch(scriptURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+      })
+      .then(response => {
+        // On success, redirect the user to your provided link
+        window.location.href = "https://balepuri.github.io/unlockedfree/";
+      })
+      .catch(error => console.error("Error!", error.message));
     }
     
-    /***************************************
-     * Prevent Form Skipping via Enter Key *
-     ***************************************/
-    // Disable Enter key for the entire document to prevent accidental submission
+    /*****************************************
+     * Prevent Form Skipping via Enter Key   *
+     *****************************************/
     document.addEventListener("keydown", function(e) {
       if (e.key === "Enter") {
-        // Check if the active element is an input and if it has content
         const activeEl = document.activeElement;
         if (activeEl.tagName === "INPUT" && activeEl.value.trim() === "") {
           e.preventDefault();
@@ -505,7 +399,6 @@
     /*****************************************
      * Extra: Smooth Fade Transition on Load *
      *****************************************/
-    // Re-apply fade effect every time a new question loads
     function applyFadeEffect(element) {
       element.style.opacity = 0;
       setTimeout(() => {
@@ -514,29 +407,19 @@
       }, 50);
     }
     
-    // You can call applyFadeEffect() on any element if needed.
-    
-    /**********************
-     * End of Script Code *
-     **********************/
+    // End of Script
   </script>
   
-  <!-- Extra Spacer for visual separation -->
+  <!-- Spacer for Visual Separation -->
   <div class="spacer"></div>
   
-  <!-- Additional Comments and Spacing Below (for code clarity and line count) -->
-  <!--
-    This HTML file implements a multi-step form with:
-      - An introductory section with headlines and description.
-      - A one-question-at-a-time form with smooth fade-in transitions.
-      - Special handling for multiple choice questions with "Yang lain" options.
-      - A unique Q7 with an input field that swaps a "Tidak Mau" button for a "Next" button.
-      - A Q8 that presents a review link and a "Sudah :)" confirmation button.
-      - Data is collected in the formData object and sent to Google Sheets via Google Apps Script.
-      - Upon successful submission, the user is redirected.
-      - The code contains detailed comments to explain each section.
-      
-    Please test and adjust any styling or functionality as needed.
+  <!-- Additional Comments:
+       - The questions are mapped with explicit field names to match your Google Sheets columns:
+         Column B: Usia, C: Gender, D: Pekerjaan, E: Gaji, F: Alasan, G: Topik, H: WA, I: Review.
+       - The submitForm() function sends the collected data as JSON.
+       - Your provided Code.gs looks correct. Just ensure that the sheet’s column order matches the appended row:
+           new Date(), data.usia, data.gender, data.pekerjaan, data.gaji, data.alasan, data.topik, data.wa || "Tidak diisi", data.review
+       - If any adjustments are needed in Code.gs, they would likely be around how the incoming data is parsed.
   -->
   
 </body>
