@@ -105,7 +105,7 @@
             cursor: pointer;
             margin-top: 20px;
             width: 50%;
-            display: block;
+            display: none;
             margin-left: auto;
             margin-right: auto;
         }
@@ -122,16 +122,6 @@
             width: 100%;
             display: none;
         }
-
-        .review-link {
-            font-size: 18px;
-            color: blue;
-            text-decoration: underline;
-            cursor: pointer;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-
     </style>
 </head>
 <body>
@@ -168,11 +158,7 @@
             { text: "Usia Anda", type: "input", placeholder: "Tulis Disini" },
             { text: "Gender", options: ["Laki-laki", "Perempuan", "Yang lain"] },
             { text: "Status Pekerjaan", options: ["Karyawan Swasta", "Wiraswasta/Entrepreneur", "Freelancer", "Yang lain"] },
-            { text: "Rata-rata gaji pekerjaan", options: ["1jt-20jt/bulan", "20jt-50jt/bulan", "50jt-100jt/bulan", "100jt-200jt/bulan", "200jt+/bulan"] },
-            { text: "Apa yang membuat Anda ingin menginap di Bale?", options: ["Ada acara dekat lokasi", "Desain bangunan bagus", "Ada pekerjaan kantor", "Ingin konsentrasi bekerja", "Bosan di rumah", "Yang lain"] },
-            { text: "Bale sangat concern terhadap dunia karir Gen Z dan milenial, dan kami ingin memberikan sumbangsi berupa materi untuk perkembangan tersebut.\n\nTopic mana dibawah ini yang sekiranya menarik bagi kamu?", options: ["Cara kamu bisa membangun bisnis 100jt/bln", "Cara menghasilkan 100jt/bln dengan skill yang sudah kamu punyai", "Cara kita membangun bisnis 500jt/bln", "Cara mencapai kebebasan finansial di dunia karir dan bisnis"] },
-            { text: "Maukah Anda mendapatkan update saat materi di release?", type: "input", placeholder: "Jika Iya, tulis No WA Kamu disini:", extraOption: "Tidak Mau" },
-            { text: "Review Hotel Bale Puri Disini untuk mendapatkan 4 Tools GRATIS", type: "link", url: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" }
+            { text: "Rata-rata gaji pekerjaan", options: ["1jt-20jt/bulan", "20jt-50jt/bulan", "50jt-100jt/bulan", "100jt-200jt/bulan", "200jt+/bulan"] }
         ];
 
         function startForm() {
@@ -191,8 +177,46 @@
                 inputField.type = "text";
                 inputField.placeholder = questionObj.placeholder;
                 inputField.classList.add("input-field");
-                inputField.addEventListener("input", () => document.getElementById("nextButton").style.display = "block");
+                inputField.addEventListener("input", () => {
+                    document.getElementById("nextButton").style.display = "block";
+                });
                 document.getElementById("optionsContainer").appendChild(inputField);
+            } else {
+                questionObj.options.forEach(option => {
+                    const button = document.createElement("button");
+                    button.classList.add("option-button");
+                    button.textContent = option;
+                    button.onclick = () => {
+                        formData[questionObj.text] = option;
+                        nextQuestion();
+                    };
+                    document.getElementById("optionsContainer").appendChild(button);
+                });
+            }
+        }
+
+        function nextQuestion() {
+            const questionObj = questions[currentQuestion];
+
+            if (questionObj.type === "input") {
+                const inputField = document.querySelector(".input-field");
+                if (!inputField.value.trim()) {
+                    alert("Silakan isi jawaban Anda!");
+                    return;
+                }
+                formData[questionObj.text] = inputField.value.trim();
+            }
+
+            currentQuestion++;
+
+            if (currentQuestion < questions.length) {
+                document.getElementById("nextButton").style.display = "none";
+                loadQuestion();
+            } else {
+                document.getElementById("questionText").style.display = "none";
+                document.getElementById("optionsContainer").style.display = "none";
+                document.getElementById("nextButton").style.display = "none";
+                document.getElementById("submitButton").style.display = "block";
             }
         }
 
