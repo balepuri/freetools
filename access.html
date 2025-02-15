@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,21 +22,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .progress-gif {
-            width: 100%;
-            max-width: 600px;
-            display: block;
-            margin: 0 auto 10px;
-        }
-
-        .small-text {
-            font-size: 20px;
-            font-weight: bold;
-            text-decoration: underline;
-            color: black;
-            margin-bottom: 15px;
-        }
-
         .video-heading {
             font-size: 24px;
             font-weight: bold;
@@ -44,58 +29,60 @@
             margin-bottom: 15px;
         }
 
-        .form-container {
-            margin-top: 20px;
-        }
-
-        .access-button {
-            background-color: green;
-            color: white;
-            padding: 15px;
+        .sub-heading {
             font-size: 20px;
             font-weight: bold;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
-        }
-
-        .google-form-iframe {
-            width: 100%;
-            height: 1200px;
-            border: none;
-        }
-
-        .code-container {
-            display: none;
-            margin-top: 20px;
-        }
-
-        .code-input {
-            padding: 10px;
-            font-size: 16px;
-            text-align: center;
-            width: 200px;
-            border: 2px solid #000;
-            border-radius: 5px;
+            color: black;
             margin-bottom: 10px;
         }
 
-        .submit-code-button {
-            background-color: blue;
-            color: white;
-            padding: 10px 15px;
-            font-size: 16px;
+        .question-container {
+            margin-top: 20px;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .question {
+            font-size: 22px;
             font-weight: bold;
-            border: none;
-            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .option-button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            font-size: 18px;
             cursor: pointer;
+            background: white;
+            border: 2px solid #000;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            text-align: left;
+            justify-content: space-between;
+            transition: 0.3s;
+        }
+
+        .option-button:hover {
+            background-color: #ddd;
+        }
+
+        .option-button img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .hidden {
             display: none;
         }
 
-        .confirm-button {
-            background-color: green;
+        .fade-out {
+            opacity: 0;
+        }
+
+        .submit-button {
+            background-color: blue;
             color: white;
             padding: 15px;
             font-size: 18px;
@@ -103,76 +90,105 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-top: 20px;
             width: 100%;
+            display: none;
         }
 
-        .error-message {
-            color: red;
-            font-size: 14px;
-            display: none;
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #ddd;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+        }
+
+        .progress-segment {
+            flex: 1;
+            background-color: transparent;
+            transition: background-color 0.3s;
+            border-radius: 10px;
+        }
+
+        .filled {
+            background-color: blue;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- Large Progress GIF -->
-        <img src="progress.gif" alt="Progress Indicator" class="progress-gif">
+        <h2 class="video-heading" id="mainHeading">Kalo Anda isi form ini, Anda dapat Akses ke semua Toolsnya!</h2>
         
-        <!-- Bold, Bigger, and Underlined Text Under Progress GIF -->
-        <p class="small-text">Anda Satu Langkah Lebih Dekat!</p>
+        <h3 class="sub-heading" id="quizHeading">YUK ISI INI UNTUK DAPETIN 3 TOOLS DARIPADA 1</h3>
+        <p id="quizDescription">Apa yang Anda dapatkan setelah mengisi form ini:</p>
+        <ul style="text-align: left;">
+            <li>✅ 20K+ ChatGPT Prompts to Boost Your Work 1000x Faster</li>
+            <li>✅ 1400+ AI Tools to Boost Your Work 1000x Faster</li>
+            <li>✅ Financial Management to Stop Losing Money Every Month</li>
+        </ul>
 
-        <!-- Updated Text -->
-        <h2 class="video-heading">Kalo Anda isi Google Form di bawah ini, Anda dapat Akses ke semua Toolsnya!</h2>
-
-        <!-- Google Form (Now Always Visible) -->
-        <div class="form-container">
-            <iframe id="googleForm" class="google-form-iframe"
-                src="https://docs.google.com/forms/d/e/1FAIpQLSc2JwE2CHpg6kOhEMpoV5w28Sl2HCwD4Zis0i_Zx2tkm_PzmA/viewform?embedded=true">
-            </iframe>
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-segment" id="segment1"></div>
+            <div class="progress-segment" id="segment2"></div>
+            <div class="progress-segment" id="segment3"></div>
         </div>
 
-        <!-- "Saya Sudah Isi Google Form" Button -->
-        <button id="confirmBtn" class="confirm-button" onclick="showCodeInput()">Saya Sudah Isi Google Form</button>
-
-        <!-- Code Input Section (Hidden Initially) -->
-        <div class="code-container" id="codeContainer">
-            <p>Isi code yang ada di akhir Google Form</p>
-            <input type="text" id="codeInput" class="code-input" placeholder="Enter code here">
-            <button id="submitCodeBtn" class="submit-code-button" onclick="validateCode()">Submit</button>
-            <p id="errorMessage" class="error-message">Incorrect code. Please try again.</p>
-        </div>
+        <form id="quizForm">
+            <div id="questionContainer"></div>
+            <button type="submit" id="submitButton" class="submit-button">Submit</button>
+        </form>
     </div>
 
     <script>
-        function showCodeInput() {
-            document.getElementById("codeContainer").style.display = "block"; // Show code input field
-            document.getElementById("confirmBtn").style.display = "none"; // Hide confirm button
+        const scriptURL = "PASTE_YOUR_DEPLOYED_SCRIPT_URL_HERE"; // Replace with Google Apps Script URL
+
+        const questions = [
+            { question: "Usia Anda?", type: "text", key: "usia" },
+            { question: "Gender Anda?", options: ["Laki-laki", "Perempuan"], key: "gender", allowOther: true },
+            { question: "Status pekerjaan?", options: ["Karyawan Swasta", "Wiraswasta/Entrepreneur", "Freelancer"], key: "pekerjaan", allowOther: true },
+            { question: "Rata-rata gaji pekerjaan?", options: ["1jt-20jt/bulan", "20jt-50jt/bulan", "50jt-100jt/bulan", "100jt-200jt/bulan", "200jt+/bulan"], key: "gaji" },
+            { question: "Apa yang membuat Anda ingin menginap di Bale?", options: ["Ada acara dekat lokasi", "Desain bangunan bagus", "Ada pekerjaan kantor", "Ingin konsentrasi bekerja", "Bosan di rumah"], key: "alasan", allowOther: true },
+            { question: "Topik mana menarik bagi kamu?", options: ["Cara kamu bisa membangun bisnis 100jt/bln", "Cara menghasilkan 100jt/bln dengan skill yang sudah kamu punyai", "Cara kita membangun bisnis 500jt/bln", "Cara mencapai kebebasan finansial di dunia karir dan bisnis"], key: "topik" },
+            { question: "Maukah Anda mendapatkan update saat materi di release? (WA)", type: "text", key: "wa", optional: true },
+            { question: "Review Hotel Bale Puri Disini (klik link lalu pilih 'Sudah')", options: ["Sudah :)"], key: "review", url: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" }
+        ];
+
+        let currentQuestionIndex = 0;
+        const questionContainer = document.getElementById("questionContainer");
+
+        function loadQuestion() {
+            const q = questions[currentQuestionIndex];
+            questionContainer.innerHTML = `
+                <p class="question">${q.question} ${q.url ? `<a href="${q.url}" target="_blank">(Klik disini)</a>` : ""}</p>
+                ${q.type === "text" ? `<input type="text" id="answerInput">` : q.options.map(option => 
+                `<button type="button" class="option-button" onclick="nextQuestion('${option}')">${option} <img src="check.png"></button>`
+            ).join('')}
+            ${q.allowOther ? '<input type="text" id="otherInput" placeholder="Yang lain">' : ''}
+            `;
         }
 
-        function validateCode() {
-            let inputCode = document.getElementById("codeInput").value.trim().toLowerCase();
-            let correctCode = "balepuri";
-            let errorMessage = document.getElementById("errorMessage");
-
-            if (inputCode === correctCode) {
-                window.location.href = "https://balepuri.github.io/unlockedfree/";
+        function nextQuestion(answer) {
+            if (questions[currentQuestionIndex].allowOther) {
+                answer = document.getElementById("otherInput")?.value || answer;
+            }
+            localStorage.setItem(questions[currentQuestionIndex].key, answer);
+            document.getElementById(`segment${currentQuestionIndex + 1}`).classList.add("filled");
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
             } else {
-                errorMessage.style.display = "block"; // Show error message
+                document.getElementById("submitButton").style.display = "block";
             }
         }
 
-        document.getElementById("codeInput").addEventListener("input", function() {
-            let inputCode = document.getElementById("codeInput").value.trim().toLowerCase();
-            let submitBtn = document.getElementById("submitCodeBtn");
-
-            if (inputCode.length > 0) {
-                submitBtn.style.display = "inline-block"; // Show button when user starts typing
-            } else {
-                submitBtn.style.display = "none"; // Hide button if input is empty
-            }
+        document.getElementById("quizForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+            fetch(scriptURL, { method: "POST", body: JSON.stringify(Object.fromEntries(new FormData(this))) })
+            .then(() => window.location.href = "https://balepuri.github.io/unlockedfree/");
         });
+
+        loadQuestion();
     </script>
 
 </body>
