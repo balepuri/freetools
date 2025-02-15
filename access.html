@@ -154,8 +154,7 @@
     </div>
     <!-- Next Button for input-based questions -->
     <button class="next-button hidden" id="nextButton" onclick="nextQuestion()">Next</button>
-    <!-- Submit Button (appears after Q8 is completed) -->
-    <button class="submit-button hidden" id="submitButton" onclick="submitForm()">Submit</button>
+    <!-- Submit Button (will be added on its own page after Q8) -->
   </div>
   
   <!-- JavaScript Section -->
@@ -188,7 +187,7 @@
      * Functions for Form Control  *
      *******************************/
     
-    // Start Form: Hide intro and show the form container
+    // Start the form: Hide intro and show the form container
     function startForm() {
       document.getElementById("introContainer").classList.add("hidden");
       document.getElementById("formContainer").classList.remove("hidden");
@@ -202,11 +201,9 @@
       const questionTextEl = document.getElementById("questionText");
       const optionsContainer = document.getElementById("optionsContainer");
       const nextButton = document.getElementById("nextButton");
-      const submitButton = document.getElementById("submitButton");
       
-      // Hide Next and Submit buttons for each new question
+      // Hide Next button for each new question
       nextButton.classList.add("hidden");
-      submitButton.classList.add("hidden");
       optionsContainer.innerHTML = "";
       
       // Get the current question object
@@ -222,14 +219,12 @@
         inputField.type = "text";
         inputField.placeholder = questionObj.placeholder;
         inputField.className = "input-field";
-        // Prevent Enter key from skipping without input
         inputField.addEventListener("keydown", function(e) {
           if (e.key === "Enter") {
             if (this.value.trim() === "") e.preventDefault();
             else e.preventDefault();
           }
         });
-        // Show Next button only when there is text
         inputField.addEventListener("input", function() {
           if (this.value.trim() !== "") nextButton.classList.remove("hidden");
           else nextButton.classList.add("hidden");
@@ -289,7 +284,6 @@
             else e.preventDefault();
           }
         });
-        // Create red "Tidak Mau" button
         const tidakBtn = document.createElement("button");
         tidakBtn.className = "tidak-button";
         tidakBtn.textContent = "Tidak Mau";
@@ -298,7 +292,6 @@
           currentQuestion++;
           loadQuestion();
         });
-        // When input is focused or has text, show Next button and hide "Tidak Mau"
         waInput.addEventListener("focus", function() {
           tidakBtn.classList.add("hidden");
           nextButton.classList.remove("hidden");
@@ -323,14 +316,20 @@
         const sudahButton = document.createElement("button");
         sudahButton.className = "sudah-button hidden";
         sudahButton.textContent = "Sudah :)";
-        // When clicked, record answer and reveal the Submit button
         sudahButton.addEventListener("click", function() {
+          // Record review answer and then show a new page with only the Submit button
           formData[questionObj.field] = "Review Selesai";
-          document.getElementById("submitButton").classList.remove("hidden");
+          const formContainer = document.getElementById("formContainer");
+          formContainer.innerHTML = "";
+          const submitBtn = document.createElement("button");
+          submitBtn.className = "submit-button";
+          submitBtn.textContent = "Submit";
+          submitBtn.addEventListener("click", submitForm);
+          formContainer.appendChild(submitBtn);
         });
         optionsContainer.appendChild(sudahButton);
         
-        // Show the "Sudah :)" button shortly after the link is clicked
+        // When the review link is clicked, show the "Sudah :)" button after a short delay
         reviewLink.addEventListener("click", function() {
           setTimeout(function() {
             sudahButton.classList.remove("hidden");
@@ -339,7 +338,7 @@
       }
     }
     
-    // Proceed to Next Question for input-based types (including extra inputs)
+    // Proceed to next question for input-based types (including extra inputs)
     function nextQuestion() {
       const questionObj = questions[currentQuestion];
       const optionsContainer = document.getElementById("optionsContainer");
@@ -360,25 +359,20 @@
       }
       
       currentQuestion++;
-      // If not the last question, load the next question
       if (currentQuestion < questions.length) {
         loadQuestion();
-      } else {
-        // For Q8, we want the question to remain visible (Submit button is revealed via "Sudah :)")
-        // So we do not call loadQuestion() here.
       }
     }
     
     // Submit the form data to Google Sheets via your Apps Script
     function submitForm() {
-      // Send data as JSON so that the Apps Script (Code.gs) can parse it
       fetch(scriptURL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
       })
       .then(response => {
-        // On success, redirect the user to your provided link
+        // On success, redirect within the same tab
         window.location.href = "https://balepuri.github.io/unlockedfree/";
       })
       .catch(error => console.error("Error!", error.message));
@@ -414,12 +408,10 @@
   <div class="spacer"></div>
   
   <!-- Additional Comments:
-       - The questions are mapped with explicit field names to match your Google Sheets columns:
+       - The questions are mapped with field names to match your Google Sheets columns:
          Column B: Usia, C: Gender, D: Pekerjaan, E: Gaji, F: Alasan, G: Topik, H: WA, I: Review.
-       - The submitForm() function sends the collected data as JSON.
-       - Your provided Code.gs looks correct. Just ensure that the sheet’s column order matches the appended row:
-           new Date(), data.usia, data.gender, data.pekerjaan, data.gaji, data.alasan, data.topik, data.wa || "Tidak diisi", data.review
-       - If any adjustments are needed in Code.gs, they would likely be around how the incoming data is parsed.
+       - The submitForm() function sends JSON data so that your Apps Script (Code.gs) can parse it.
+       - Ensure your Apps Script is deployed as a web app with "Anyone, even anonymous" access.
   -->
   
 </body>
