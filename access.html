@@ -121,12 +121,10 @@
   </div>
   
   <script>
-    // Set your backend URL (the standalone Apps Script Web App URL)
+    // Set your backend URL (the standalone Apps Script web app URL)
     const backendURL = "https://script.google.com/macros/s/AKfycbwprsRGgkuLizN69F0nqD0bWHUT82dQYsNgT2MEJ5yLBK1K5cje9EzekeE8rGZ0J_wb7Q/exec";
-    
     let formData = {};
     let currentQuestion = 0;
-    
     // Define questions (internal keys; these keys correspond to the JSON structure expected by your backend)
     const questions = [
       { field: "usia", text: "Usia Anda", type: "input", placeholder: "Tulis Disini" },
@@ -158,7 +156,7 @@
       questionTextEl.style.opacity = 0;
       setTimeout(() => { questionTextEl.style.opacity = 1; }, 100);
       
-      // Debug: Log current question being loaded
+      // Debug: Log current question and formData
       console.log("Loading question:", questionObj.field, "Current formData:", formData);
       
       if (questionObj.type === "input") {
@@ -282,10 +280,12 @@
       }
     }
     
+    // Submit the collected data to the backend using fetch in no-cors mode.
     function submitForm() {
       console.log("Submitting formData:", JSON.stringify(formData));
       fetch(backendURL, {
         method: "POST",
+        mode: "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
       }).then(() => {
