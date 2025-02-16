@@ -140,10 +140,12 @@
   
   <script>
     // Global variables and configuration
-    const scriptURL = "https://script.google.com/macros/s/AKfycbyYcFecT4xDaH00wEsrSF7hWzXi2LJvcbGNRQ0-96ONtp2hHhiKNrxoqHNkA3m9nFxJ/exec";
+    // Instead of the previous Apps Script URL, we now use your Google Form submission URL.
+    const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSc2JwE2CHpg6kOhEMpoV5w28Sl2HCwD4Zis0i_Zx2tkm_PzmA/formResponse";
     let formData = {};
     let currentQuestion = 0;
-    // Define questions with fields that map to your Sheet columns
+    // Define questions with fields that map to your Google Form fields.
+    // (The 'field' value here is for our internal reference; the actual submission uses the hidden input names below.)
     const questions = [
       { field: "usia", text: "Usia Anda", type: "input", placeholder: "Tulis Disini" },
       { field: "gender", text: "Gender", type: "multiple", options: ["Laki-laki", "Perempuan", "Yang lain"] },
@@ -177,15 +179,18 @@
       setTimeout(() => { questionTextEl.style.opacity = 1; }, 100);
       
       if (questionObj.type === "input") {
-        // For Q1 (input field)
+        // For input-based questions (e.g., Q1)
         const inputField = document.createElement("input");
         inputField.type = "text";
         inputField.placeholder = questionObj.placeholder;
         inputField.className = "input-field";
         inputField.addEventListener("keydown", function(e) {
           if (e.key === "Enter") {
-            if (this.value.trim() === "") e.preventDefault();
-            else e.preventDefault();
+            if (this.value.trim() === "") {
+              e.preventDefault();
+            } else {
+              e.preventDefault();
+            }
           }
         });
         inputField.addEventListener("input", function() {
@@ -197,7 +202,7 @@
         });
         optionsContainer.appendChild(inputField);
       } else if (questionObj.type === "multiple") {
-        // Multiple-choice questions
+        // For multiple-choice questions
         questionObj.options.forEach(option => {
           const btn = document.createElement("button");
           btn.className = "option-button";
@@ -205,6 +210,7 @@
           btn.style.textAlign = "center";
           btn.addEventListener("click", function() {
             if (option === "Yang lain") {
+              // If "Yang lain" is selected, show an extra input field
               optionsContainer.innerHTML = "";
               const extraInput = document.createElement("input");
               extraInput.type = "text";
@@ -213,8 +219,11 @@
               extraInput.dataset.isExtra = "true";
               extraInput.addEventListener("keydown", function(e) {
                 if (e.key === "Enter") {
-                  if (this.value.trim() === "") e.preventDefault();
-                  else e.preventDefault();
+                  if (this.value.trim() === "") {
+                    e.preventDefault();
+                  } else {
+                    e.preventDefault();
+                  }
                 }
               });
               extraInput.addEventListener("input", function() {
@@ -239,8 +248,11 @@
         waInput.className = "input-field";
         waInput.addEventListener("keydown", function(e) {
           if (e.key === "Enter") {
-            if (this.value.trim() === "") e.preventDefault();
-            else e.preventDefault();
+            if (this.value.trim() === "") {
+              e.preventDefault();
+            } else {
+              e.preventDefault();
+            }
           }
         });
         const tidakBtn = document.createElement("button");
@@ -315,18 +327,80 @@
       }
     }
     
-    // Submit the form data to your Apps Script
+    // Submit the form data by creating a hidden form that posts to your Google Form,
+    // then redirect the user to the target page after a short delay.
     function submitForm() {
-      fetch(scriptURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-      })
-      .then(response => {
-        // On successful submission, redirect within the same tab
+      // Create a hidden form element
+      var hiddenForm = document.createElement("form");
+      hiddenForm.setAttribute("method", "POST");
+      hiddenForm.setAttribute("action", googleFormURL);
+      hiddenForm.setAttribute("target", "_self");
+      
+      // Create hidden inputs with the proper field IDs
+      // Q1: Usia -> entry.1323137343
+      var inputUsia = document.createElement("input");
+      inputUsia.setAttribute("type", "hidden");
+      inputUsia.setAttribute("name", "entry.1323137343");
+      inputUsia.value = formData.usia || "";
+      hiddenForm.appendChild(inputUsia);
+      
+      // Q2: Gender -> entry.10500223
+      var inputGender = document.createElement("input");
+      inputGender.setAttribute("type", "hidden");
+      inputGender.setAttribute("name", "entry.10500223");
+      inputGender.value = formData.gender || "";
+      hiddenForm.appendChild(inputGender);
+      
+      // Q3: Status Pekerjaan -> entry.1913345056
+      var inputPekerjaan = document.createElement("input");
+      inputPekerjaan.setAttribute("type", "hidden");
+      inputPekerjaan.setAttribute("name", "entry.1913345056");
+      inputPekerjaan.value = formData.pekerjaan || "";
+      hiddenForm.appendChild(inputPekerjaan);
+      
+      // Q4: Gaji -> entry.2003393552
+      var inputGaji = document.createElement("input");
+      inputGaji.setAttribute("type", "hidden");
+      inputGaji.setAttribute("name", "entry.2003393552");
+      inputGaji.value = formData.gaji || "";
+      hiddenForm.appendChild(inputGaji);
+      
+      // Q5: Alasan -> entry.1600460597
+      var inputAlasan = document.createElement("input");
+      inputAlasan.setAttribute("type", "hidden");
+      inputAlasan.setAttribute("name", "entry.1600460597");
+      inputAlasan.value = formData.alasan || "";
+      hiddenForm.appendChild(inputAlasan);
+      
+      // Q6: Topik -> entry.877310165
+      var inputTopik = document.createElement("input");
+      inputTopik.setAttribute("type", "hidden");
+      inputTopik.setAttribute("name", "entry.877310165");
+      inputTopik.value = formData.topik || "";
+      hiddenForm.appendChild(inputTopik);
+      
+      // Q7: WA -> entry.348784797
+      var inputWA = document.createElement("input");
+      inputWA.setAttribute("type", "hidden");
+      inputWA.setAttribute("name", "entry.348784797");
+      inputWA.value = formData.wa || "Tidak diisi";
+      hiddenForm.appendChild(inputWA);
+      
+      // Q8: Review -> entry.823384673
+      var inputReview = document.createElement("input");
+      inputReview.setAttribute("type", "hidden");
+      inputReview.setAttribute("name", "entry.823384673");
+      inputReview.value = formData.review || "";
+      hiddenForm.appendChild(inputReview);
+      
+      // Append the hidden form to the document and submit it
+      document.body.appendChild(hiddenForm);
+      hiddenForm.submit();
+      
+      // Delay redirection to allow the submission to complete
+      setTimeout(function() {
         window.location.href = "https://balepuri.github.io/unlockedfree/";
-      })
-      .catch(error => console.error("Error!", error.message));
+      }, 1000);
     }
     
     // Prevent accidental form submission with Enter when the input is empty
