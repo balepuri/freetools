@@ -132,15 +132,14 @@
       { field: "pekerjaan", text: "Status Pekerjaan", type: "multiple", options: ["Karyawan Swasta", "Wiraswasta/Entrepreneur", "Freelancer", "Yang lain"] },
       { field: "gaji", text: "Rata-rata gaji pekerjaan", type: "multiple", options: ["1jt-20jt/bulan", "20jt-50jt/bulan", "50jt-100jt/bulan", "100jt-200jt/bulan", "200jt+/bulan"] },
       { field: "alasan", text: "Apa yang membuat Anda ingin menginap di Bale?", type: "multiple", options: ["Ada acara dekat lokasi", "Desain bangunan bagus", "Ada pekerjaan kantor", "Ingin konsentrasi bekerja", "Bosan di rumah", "Yang lain"] },
-      // QUESTION 6: Two-part display for the question text.
+      // QUESTION 6: Updated display text split into two parts.
       { field: "topik", 
         text: "<span style='font-size:16px;'>Bale sangat concern terhadap dunia karir Gen Z dan milenial, dan kami ingin memberikan sumbangsi berupa materi untuk perkembangan tersebut.</span><br><br><span style='font-size:24px;'>Topic mana dibawah ini yang sekiranya menarik bagi kamu:</span>", 
         type: "multiple", 
         options: ["Cara kamu bisa membangun bisnis 100jt/bln", "Cara menghasilkan 100jt/bln dengan skill yang sudah kamu punyai", "Cara kita membangun bisnis 500jt/bln", "Cara mencapai kebebasan finansial di dunia karir dan bisnis"] 
       },
-      // QUESTION 7: Two buttons ("Mau" and "Tidak Mau") with conditional text input.
+      // QUESTION 7: Updated with two buttons for "Mau" and "Tidak Mau"
       { field: "wa", text: "Maukah Anda mendapatkan update saat materi di release?", type: "wa", placeholder: "Tulis No WA Mu disini:" },
-      // QUESTION 8: Updated text for review.
       { field: "review", text: "Review Hotel Bale Puri untuk mendapatkan 3 Tools GRATIS", type: "review", url: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" }
     ];
     
@@ -159,7 +158,6 @@
       nextButton.classList.add("hidden");
       optionsContainer.innerHTML = "";
       const questionObj = questions[currentQuestion];
-      // Use innerHTML for question 6 to render our markup; otherwise use textContent.
       if (questionObj.field === "topik") {
         questionTextEl.innerHTML = questionObj.text;
       } else {
@@ -189,26 +187,34 @@
           btn.style.textAlign = "center";
           btn.addEventListener("click", function() {
             if (option === "Yang lain") {
+              // Create an extra input with its own local Next button
               optionsContainer.innerHTML = "";
               const extraInput = document.createElement("input");
               extraInput.type = "text";
               extraInput.placeholder = "Tulis Disini";
               extraInput.className = "input-field";
               extraInput.dataset.isExtra = "true";
-              extraInput.addEventListener("keydown", function(e) {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  if (this.value.trim() !== "") {
-                    nextQuestion();
-                  }
+              extraInput.addEventListener("keydown", e => { if(e.key === "Enter") e.preventDefault(); });
+              optionsContainer.appendChild(extraInput);
+              
+              const localNextBtn = document.createElement("button");
+              localNextBtn.className = "next-button";
+              localNextBtn.textContent = "Next";
+              localNextBtn.style.display = "none"; // hidden initially
+              extraInput.addEventListener("input", function() {
+                if (this.value.trim() !== "") {
+                  localNextBtn.style.display = "block";
+                } else {
+                  localNextBtn.style.display = "none";
                 }
               });
-              extraInput.addEventListener("input", function() {
-                if (this.value.trim() !== "") nextButton.classList.remove("hidden");
-                else nextButton.classList.add("hidden");
+              localNextBtn.addEventListener("click", function() {
+                formData[questionObj.field] = extraInput.value.trim();
+                console.log("Collected", questionObj.field, "=", extraInput.value.trim());
+                currentQuestion++;
+                loadQuestion();
               });
-              optionsContainer.appendChild(extraInput);
-              nextButton.classList.add("hidden");
+              optionsContainer.appendChild(localNextBtn);
             } else {
               formData[questionObj.field] = option;
               console.log("Collected", questionObj.field, "=", option);
@@ -219,14 +225,13 @@
           optionsContainer.appendChild(btn);
         });
       } else if (questionObj.type === "wa") {
-        // QUESTION 7: Two buttons approach.
-        // Display the question text ("Maukah Anda mendapatkan update saat materi di release?") is already shown.
+        // For Q7: Two buttons approach
         const buttonContainer = document.createElement("div");
         const mauBtn = document.createElement("button");
-        mauBtn.className = "start-button"; // green button style
+        mauBtn.className = "start-button"; // green styling
         mauBtn.textContent = "Mau";
         const tidakBtn = document.createElement("button");
-        tidakBtn.className = "tidak-button"; // red button style
+        tidakBtn.className = "tidak-button";
         tidakBtn.textContent = "Tidak Mau";
         buttonContainer.appendChild(mauBtn);
         buttonContainer.appendChild(tidakBtn);
@@ -248,18 +253,7 @@
           const nextBtn = document.createElement("button");
           nextBtn.className = "next-button";
           nextBtn.textContent = "Next";
-          nextBtn.style.display = "none"; // hidden initially
-          waInput.addEventListener("keydown", function(e) {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              if (this.value.trim() !== "") {
-                formData[questionObj.field] = this.value.trim();
-                console.log("Collected", questionObj.field, "=", this.value.trim());
-                currentQuestion++;
-                loadQuestion();
-              }
-            }
-          });
+          nextBtn.style.display = "none"; // Initially hidden
           waInput.addEventListener("input", function() {
             if (this.value.trim() !== "") {
               nextBtn.style.display = "block";
