@@ -140,24 +140,23 @@
   
   <script>
     // Global variables and configuration
-    // Instead of the previous Apps Script URL, we now use your Google Form submission URL.
+    // Use your Google Form submission URL here:
     const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSc2JwE2CHpg6kOhEMpoV5w28Sl2HCwD4Zis0i_Zx2tkm_PzmA/formResponse";
     let formData = {};
     let currentQuestion = 0;
-    // Define questions with fields that map to your Google Form fields.
-    // (The 'field' value here is for our internal reference; the actual submission uses the hidden input names below.)
+    // Define questions with our internal field keys and options.
     const questions = [
       { field: "usia", text: "Usia Anda", type: "input", placeholder: "Tulis Disini" },
       { field: "gender", text: "Gender", type: "multiple", options: ["Laki-laki", "Perempuan", "Yang lain"] },
       { field: "pekerjaan", text: "Status Pekerjaan", type: "multiple", options: ["Karyawan Swasta", "Wiraswasta/Entrepreneur", "Freelancer", "Yang lain"] },
       { field: "gaji", text: "Rata-rata gaji pekerjaan", type: "multiple", options: ["1jt-20jt/bulan", "20jt-50jt/bulan", "50jt-100jt/bulan", "100jt-200jt/bulan", "200jt+/bulan"] },
       { field: "alasan", text: "Apa yang membuat Anda ingin menginap di Bale?", type: "multiple", options: ["Ada acara dekat lokasi", "Desain bangunan bagus", "Ada pekerjaan kantor", "Ingin konsentrasi bekerja", "Bosan di rumah", "Yang lain"] },
-      { field: "topik", text: "Bale sangat concern terhadap dunia karir Gen Z dan milenial, dan kami ingin memberikan sumbangsi berupa materi untuk perkembangan tersebut. Topic mana dibawah ini yang sekiranya menarik bagi kamu?", type: "multiple", options: ["Cara kamu bisa membangun bisnis 100jt/bln", "Cara menghasilkan 100jt/bln dengan skill yang sudah kamu punyai", "Cara kita membangun bisnis 500jt/bln", "Cara mencapai kebebasan finansial di dunia karir dan bisnis"] },
-      { field: "wa", text: "Maukah Anda mendapatkan update saat materi di release?", type: "wa", placeholder: "Jika Iya, tulis No WA Kamu disini:" },
-      { field: "review", text: "Review Hotel Bale Puri Disini untuk mendapatkan 4 Tools GRATIS", type: "review", url: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" }
+      { field: "topik", text: "Topic mana yang menarik bagi kamu?", type: "multiple", options: ["Cara kamu bisa membangun bisnis 100jt/bln", "Cara menghasilkan 100jt/bln dengan skill yang sudah kamu punyai", "Cara kita membangun bisnis 500jt/bln", "Cara mencapai kebebasan finansial di dunia karir dan bisnis"] },
+      { field: "wa", text: "Maukah Anda mendapatkan update? (Jika Iya, tulis No WA Kamu)", type: "wa", placeholder: "Tulis No WA Kamu disini:" },
+      { field: "review", text: "Review Hotel Bale Puri untuk mendapatkan 4 Tools GRATIS", type: "review", url: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" }
     ];
     
-    // Start the form by hiding the intro and displaying the form
+    // Start the form: hide intro, show form section, reset values, load first question.
     function startForm() {
       document.getElementById("introContainer").classList.add("hidden");
       document.getElementById("formContainer").classList.remove("hidden");
@@ -166,7 +165,7 @@
       loadQuestion();
     }
     
-    // Load current question based on its type
+    // Load the current question based on its type.
     function loadQuestion() {
       const questionTextEl = document.getElementById("questionText");
       const optionsContainer = document.getElementById("optionsContainer");
@@ -179,26 +178,19 @@
       setTimeout(() => { questionTextEl.style.opacity = 1; }, 100);
       
       if (questionObj.type === "input") {
-        // For input-based questions (e.g., Q1)
+        // For an input field (e.g., Q1)
         const inputField = document.createElement("input");
         inputField.type = "text";
         inputField.placeholder = questionObj.placeholder;
         inputField.className = "input-field";
         inputField.addEventListener("keydown", function(e) {
           if (e.key === "Enter") {
-            if (this.value.trim() === "") {
-              e.preventDefault();
-            } else {
-              e.preventDefault();
-            }
+            e.preventDefault();
           }
         });
         inputField.addEventListener("input", function() {
           if (this.value.trim() !== "") nextButton.classList.remove("hidden");
           else nextButton.classList.add("hidden");
-        });
-        inputField.addEventListener("focus", function() {
-          if (this.value.trim() !== "") nextButton.classList.remove("hidden");
         });
         optionsContainer.appendChild(inputField);
       } else if (questionObj.type === "multiple") {
@@ -210,7 +202,6 @@
           btn.style.textAlign = "center";
           btn.addEventListener("click", function() {
             if (option === "Yang lain") {
-              // If "Yang lain" is selected, show an extra input field
               optionsContainer.innerHTML = "";
               const extraInput = document.createElement("input");
               extraInput.type = "text";
@@ -218,13 +209,7 @@
               extraInput.className = "input-field";
               extraInput.dataset.isExtra = "true";
               extraInput.addEventListener("keydown", function(e) {
-                if (e.key === "Enter") {
-                  if (this.value.trim() === "") {
-                    e.preventDefault();
-                  } else {
-                    e.preventDefault();
-                  }
-                }
+                if (e.key === "Enter") e.preventDefault();
               });
               extraInput.addEventListener("input", function() {
                 if (this.value.trim() !== "") nextButton.classList.remove("hidden");
@@ -241,19 +226,13 @@
           optionsContainer.appendChild(btn);
         });
       } else if (questionObj.type === "wa") {
-        // Q7: WA update question
+        // For the WA question (Q7)
         const waInput = document.createElement("input");
         waInput.type = "text";
         waInput.placeholder = questionObj.placeholder;
         waInput.className = "input-field";
         waInput.addEventListener("keydown", function(e) {
-          if (e.key === "Enter") {
-            if (this.value.trim() === "") {
-              e.preventDefault();
-            } else {
-              e.preventDefault();
-            }
-          }
+          if (e.key === "Enter") e.preventDefault();
         });
         const tidakBtn = document.createElement("button");
         tidakBtn.className = "tidak-button";
@@ -274,7 +253,7 @@
         optionsContainer.appendChild(waInput);
         optionsContainer.appendChild(tidakBtn);
       } else if (questionObj.type === "review") {
-        // Q8: Review question with a link
+        // For the review question (Q8)
         const reviewLink = document.createElement("a");
         reviewLink.href = questionObj.url;
         reviewLink.target = "_blank";
@@ -286,7 +265,7 @@
         sudahButton.textContent = "Sudah :)";
         sudahButton.addEventListener("click", function() {
           formData[questionObj.field] = "Review Selesai";
-          // Clear the form container and show a submit page with only the Submit button
+          // Clear the form container and show a submit page with only the Submit button.
           const formContainer = document.getElementById("formContainer");
           formContainer.innerHTML = "";
           const submitBtn = document.createElement("button");
@@ -304,7 +283,7 @@
       }
     }
     
-    // For input-based questions, record the answer and move to the next question
+    // For input-based questions, record the value and move to the next question.
     function nextQuestion() {
       const questionObj = questions[currentQuestion];
       const optionsContainer = document.getElementById("optionsContainer");
@@ -327,83 +306,94 @@
       }
     }
     
-    // Submit the form data by creating a hidden form that posts to your Google Form,
-    // then redirect the user to the target page after a short delay.
+    // Submit the collected data by creating a hidden form inside a hidden iframe.
     function submitForm() {
-      // Create a hidden form element
-      var hiddenForm = document.createElement("form");
+      // Create an invisible iframe
+      var iframe = document.createElement("iframe");
+      iframe.style.display = "none";
+      document.body.appendChild(iframe);
+      
+      // Write a basic document into the iframe
+      var doc = iframe.contentWindow.document;
+      doc.open();
+      doc.write('<html><body></body></html>');
+      doc.close();
+      
+      // Create a hidden form in the iframe document
+      var hiddenForm = doc.createElement("form");
       hiddenForm.setAttribute("method", "POST");
       hiddenForm.setAttribute("action", googleFormURL);
       hiddenForm.setAttribute("target", "_self");
       
-      // Create hidden inputs with the proper field IDs
+      // Append hidden inputs for each question
+      
       // Q1: Usia -> entry.1323137343
-      var inputUsia = document.createElement("input");
+      var inputUsia = doc.createElement("input");
       inputUsia.setAttribute("type", "hidden");
       inputUsia.setAttribute("name", "entry.1323137343");
       inputUsia.value = formData.usia || "";
       hiddenForm.appendChild(inputUsia);
       
       // Q2: Gender -> entry.10500223
-      var inputGender = document.createElement("input");
+      var inputGender = doc.createElement("input");
       inputGender.setAttribute("type", "hidden");
       inputGender.setAttribute("name", "entry.10500223");
       inputGender.value = formData.gender || "";
       hiddenForm.appendChild(inputGender);
       
       // Q3: Status Pekerjaan -> entry.1913345056
-      var inputPekerjaan = document.createElement("input");
+      var inputPekerjaan = doc.createElement("input");
       inputPekerjaan.setAttribute("type", "hidden");
       inputPekerjaan.setAttribute("name", "entry.1913345056");
       inputPekerjaan.value = formData.pekerjaan || "";
       hiddenForm.appendChild(inputPekerjaan);
       
       // Q4: Gaji -> entry.2003393552
-      var inputGaji = document.createElement("input");
+      var inputGaji = doc.createElement("input");
       inputGaji.setAttribute("type", "hidden");
       inputGaji.setAttribute("name", "entry.2003393552");
       inputGaji.value = formData.gaji || "";
       hiddenForm.appendChild(inputGaji);
       
       // Q5: Alasan -> entry.1600460597
-      var inputAlasan = document.createElement("input");
+      var inputAlasan = doc.createElement("input");
       inputAlasan.setAttribute("type", "hidden");
       inputAlasan.setAttribute("name", "entry.1600460597");
       inputAlasan.value = formData.alasan || "";
       hiddenForm.appendChild(inputAlasan);
       
       // Q6: Topik -> entry.877310165
-      var inputTopik = document.createElement("input");
+      var inputTopik = doc.createElement("input");
       inputTopik.setAttribute("type", "hidden");
       inputTopik.setAttribute("name", "entry.877310165");
       inputTopik.value = formData.topik || "";
       hiddenForm.appendChild(inputTopik);
       
       // Q7: WA -> entry.348784797
-      var inputWA = document.createElement("input");
+      var inputWA = doc.createElement("input");
       inputWA.setAttribute("type", "hidden");
       inputWA.setAttribute("name", "entry.348784797");
       inputWA.value = formData.wa || "Tidak diisi";
       hiddenForm.appendChild(inputWA);
       
       // Q8: Review -> entry.823384673
-      var inputReview = document.createElement("input");
+      var inputReview = doc.createElement("input");
       inputReview.setAttribute("type", "hidden");
       inputReview.setAttribute("name", "entry.823384673");
       inputReview.value = formData.review || "";
       hiddenForm.appendChild(inputReview);
       
-      // Append the hidden form to the document and submit it
-      document.body.appendChild(hiddenForm);
+      // Append the hidden form to the iframe's document and submit it
+      doc.body.appendChild(hiddenForm);
       hiddenForm.submit();
       
-      // Delay redirection to allow the submission to complete
+      // After a short delay, redirect the main window
       setTimeout(function() {
         window.location.href = "https://balepuri.github.io/unlockedfree/";
       }, 1000);
     }
     
-    // Prevent accidental form submission with Enter when the input is empty
+    // Prevent accidental form submission with Enter when an input is empty
     document.addEventListener("keydown", function(e) {
       if (e.key === "Enter") {
         const activeEl = document.activeElement;
