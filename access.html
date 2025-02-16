@@ -98,9 +98,6 @@
   </style>
 </head>
 <body>
-  <!-- Hidden iframe for submission -->
-  <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
-  
   <!-- Introduction Section -->
   <div class="container" id="introContainer">
     <div class="headline1">Kalo Anda isi form di bawah ini, Anda dapat Akses ke semua Toolsnya!</div>
@@ -124,10 +121,11 @@
   </div>
   
   <script>
-    // Global configuration
-    const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSc2JwE2CHpg6kOhEMpoV5w28Sl2HCwD4Zis0i_Zx2tkm_PzmA/formResponse";
+    // Global configuration: Use your deployed Apps Script Web App URL.
+    const backendURL = "https://script.google.com/macros/s/AKfycbwprsRGgkuLizN69F0nqD0bWHUT82dQYsNgT2MEJ5yLBK1K5cje9EzekeE8rGZ0J_wb7Q/exec";
     let formData = {};
     let currentQuestion = 0;
+    // Define questions (internal mapping; labels here are for your custom form)
     const questions = [
       { field: "usia", text: "Usia Anda", type: "input", placeholder: "Tulis Disini" },
       { field: "gender", text: "Gender", type: "multiple", options: ["Laki-laki", "Perempuan", "Yang lain"] },
@@ -274,29 +272,12 @@
       }
     }
     
-    // Submit the data using fetch with no-cors, including additional hidden fields.
+    // Submit the collected data to your backend (Apps Script)
     function submitForm() {
-      const params = new URLSearchParams();
-      params.append("entry.1323137343", formData.usia || "");
-      params.append("entry.10500223", formData.gender || "");
-      params.append("entry.1913345056", formData.pekerjaan || "");
-      params.append("entry.2003393552", formData.gaji || "");
-      params.append("entry.1600460597", formData.alasan || "");
-      params.append("entry.877310165", formData.topik || "");
-      params.append("entry.348784797", formData.wa || "Tidak diisi");
-      params.append("entry.823384673", formData.review || "");
-      
-      // Additional hidden fields that Google Form may expect:
-      params.append("fvv", "1");
-      params.append("pageHistory", "0");
-      params.append("fbzx", "1234567890"); // Replace with the fbzx value from your form source if available.
-      params.append("submissionTimestamp", "-1");
-      
-      fetch(googleFormURL, {
+      fetch(backendURL, {
         method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: params.toString()
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
       }).then(() => {
         window.location.href = "https://balepuri.github.io/unlockedfree/";
       }).catch(error => {
