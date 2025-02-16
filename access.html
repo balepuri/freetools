@@ -132,15 +132,15 @@
       { field: "pekerjaan", text: "Status Pekerjaan", type: "multiple", options: ["Karyawan Swasta", "Wiraswasta/Entrepreneur", "Freelancer", "Yang lain"] },
       { field: "gaji", text: "Rata-rata gaji pekerjaan", type: "multiple", options: ["1jt-20jt/bulan", "20jt-50jt/bulan", "50jt-100jt/bulan", "100jt-200jt/bulan", "200jt+/bulan"] },
       { field: "alasan", text: "Apa yang membuat Anda ingin menginap di Bale?", type: "multiple", options: ["Ada acara dekat lokasi", "Desain bangunan bagus", "Ada pekerjaan kantor", "Ingin konsentrasi bekerja", "Bosan di rumah", "Yang lain"] },
-      // QUESTION 6: Updated text with two parts
+      // QUESTION 6: Updated display text split into two parts.
       { field: "topik", 
         text: "<span style='font-size:16px;'>Bale sangat concern terhadap dunia karir Gen Z dan milenial, dan kami ingin memberikan sumbangsi berupa materi untuk perkembangan tersebut.</span><br><br><span style='font-size:24px;'>Topic mana dibawah ini yang sekiranya menarik bagi kamu:</span>", 
         type: "multiple", 
         options: ["Cara kamu bisa membangun bisnis 100jt/bln", "Cara menghasilkan 100jt/bln dengan skill yang sudah kamu punyai", "Cara kita membangun bisnis 500jt/bln", "Cara mencapai kebebasan finansial di dunia karir dan bisnis"] 
       },
-      // QUESTION 7: Updated with two buttons for "Mau" and "Tidak Mau"
+      // QUESTION 7: Updated behavior with two buttons
       { field: "wa", text: "Maukah Anda mendapatkan update saat materi di release?", type: "wa", placeholder: "Tulis No WA Mu disini:" },
-      { field: "review", text: "Review Hotel Bale Puri untuk mendapatkan 4 Tools GRATIS", type: "review", url: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" }
+      { field: "review", text: "Review Hotel Bale Puri untuk mendapatkan 3 Tools GRATIS", type: "review", url: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" }
     ];
     
     function startForm() {
@@ -158,7 +158,6 @@
       nextButton.classList.add("hidden");
       optionsContainer.innerHTML = "";
       const questionObj = questions[currentQuestion];
-      // Use innerHTML for question 6 to render our HTML markup; otherwise use textContent.
       if (questionObj.field === "topik") {
         questionTextEl.innerHTML = questionObj.text;
       } else {
@@ -166,6 +165,8 @@
       }
       questionTextEl.style.opacity = 0;
       setTimeout(() => { questionTextEl.style.opacity = 1; }, 100);
+      
+      console.log("Loading question:", questionObj.field, "Current formData:", formData);
       
       if (questionObj.type === "input") {
         const inputField = document.createElement("input");
@@ -209,12 +210,11 @@
           optionsContainer.appendChild(btn);
         });
       } else if (questionObj.type === "wa") {
-        // Updated behavior for Q7:
-        // Display the question text (already set in questionTextEl), then show two buttons.
+        // For Q7: Two buttons approach
         const buttonContainer = document.createElement("div");
         // Create "Mau" button (green)
         const mauBtn = document.createElement("button");
-        mauBtn.className = "start-button"; // green style
+        mauBtn.className = "start-button"; // green styling
         mauBtn.textContent = "Mau";
         // Create "Tidak Mau" button (red)
         const tidakBtn = document.createElement("button");
@@ -224,6 +224,7 @@
         buttonContainer.appendChild(tidakBtn);
         optionsContainer.appendChild(buttonContainer);
         
+        // If user clicks "Tidak Mau", record "Tidak diisi" and advance.
         tidakBtn.addEventListener("click", function() {
           formData[questionObj.field] = "Tidak diisi";
           console.log("Collected", questionObj.field, "= Tidak diisi");
@@ -231,7 +232,7 @@
           loadQuestion();
         });
         
-        // When "Mau" is clicked, replace the buttonContainer with a text input and a Next button.
+        // If user clicks "Mau", then replace the buttons with a text input and a blue "Next" button.
         mauBtn.addEventListener("click", function() {
           buttonContainer.innerHTML = "";
           const waInput = document.createElement("input");
@@ -241,7 +242,7 @@
           const nextBtn = document.createElement("button");
           nextBtn.className = "next-button";
           nextBtn.textContent = "Next";
-          nextBtn.style.display = "none"; // Initially hidden
+          nextBtn.style.display = "none"; // hidden initially
           waInput.addEventListener("input", function() {
             if (this.value.trim() !== "") {
               nextBtn.style.display = "block";
