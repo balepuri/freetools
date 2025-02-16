@@ -116,16 +116,18 @@
       <div id="questionText" class="headline2"></div>
     </div>
     <div id="optionsContainer"></div>
-    <!-- Next button for input-based questions -->
+    <!-- Next button appears for input-based questions -->
     <button class="next-button hidden" id="nextButton" onclick="nextQuestion()">Next</button>
   </div>
   
   <script>
-    // Global configuration: Use your deployed Apps Script Web App URL.
+    // Set your backend URL (the standalone Apps Script Web App URL)
     const backendURL = "https://script.google.com/macros/s/AKfycbwprsRGgkuLizN69F0nqD0bWHUT82dQYsNgT2MEJ5yLBK1K5cje9EzekeE8rGZ0J_wb7Q/exec";
+    
     let formData = {};
     let currentQuestion = 0;
-    // Define questions (internal mapping; labels here are for your custom form)
+    
+    // Define questions (internal keys; these keys correspond to the JSON structure expected by your backend)
     const questions = [
       { field: "usia", text: "Usia Anda", type: "input", placeholder: "Tulis Disini" },
       { field: "gender", text: "Gender", type: "multiple", options: ["Laki-laki", "Perempuan", "Yang lain"] },
@@ -155,6 +157,9 @@
       questionTextEl.textContent = questionObj.text;
       questionTextEl.style.opacity = 0;
       setTimeout(() => { questionTextEl.style.opacity = 1; }, 100);
+      
+      // Debug: Log current question being loaded
+      console.log("Loading question:", questionObj.field, "Current formData:", formData);
       
       if (questionObj.type === "input") {
         const inputField = document.createElement("input");
@@ -190,6 +195,7 @@
               nextButton.classList.add("hidden");
             } else {
               formData[questionObj.field] = option;
+              console.log("Collected", questionObj.field, "=", option);
               currentQuestion++;
               loadQuestion();
             }
@@ -207,6 +213,7 @@
         tidakBtn.textContent = "Tidak Mau";
         tidakBtn.addEventListener("click", function() {
           formData[questionObj.field] = "Tidak diisi";
+          console.log("Collected", questionObj.field, "= Tidak diisi");
           currentQuestion++;
           loadQuestion();
         });
@@ -232,6 +239,7 @@
         sudahButton.textContent = "Sudah :)";
         sudahButton.addEventListener("click", function() {
           formData[questionObj.field] = "Review Selesai";
+          console.log("Collected", questionObj.field, "= Review Selesai");
           // Clear the form container and show a final Submit button.
           const formContainer = document.getElementById("formContainer");
           formContainer.innerHTML = "";
@@ -258,12 +266,14 @@
         const inputEl = optionsContainer.querySelector("input");
         if (inputEl && inputEl.value.trim() !== "") {
           formData[questionObj.field] = inputEl.value.trim();
+          console.log("Collected", questionObj.field, "=", inputEl.value.trim());
         }
       }
       if (questionObj.type === "multiple") {
         const extraInput = optionsContainer.querySelector("input[data-isExtra='true']");
         if (extraInput && extraInput.value.trim() !== "") {
           formData[questionObj.field] = extraInput.value.trim();
+          console.log("Collected", questionObj.field, "=", extraInput.value.trim());
         }
       }
       currentQuestion++;
@@ -272,16 +282,17 @@
       }
     }
     
-    // Submit the collected data to your backend (Apps Script)
     function submitForm() {
+      console.log("Submitting formData:", JSON.stringify(formData));
       fetch(backendURL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData)
       }).then(() => {
+        console.log("Submission successful");
         window.location.href = "https://balepuri.github.io/unlockedfree/";
       }).catch(error => {
-        console.error("Error!", error);
+        console.error("Error during submission:", error);
         window.location.href = "https://balepuri.github.io/unlockedfree/";
       });
     }
