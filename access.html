@@ -98,8 +98,8 @@
   </style>
 </head>
 <body>
-  <!-- Hidden iframe to handle Google Form submission -->
-  <iframe name="hidden_iframe" id="hidden_iframe" style="display: none;"></iframe>
+  <!-- Hidden iframe for submission -->
+  <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
   
   <!-- Introduction Section -->
   <div class="container" id="introContainer">
@@ -128,7 +128,6 @@
     const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSc2JwE2CHpg6kOhEMpoV5w28Sl2HCwD4Zis0i_Zx2tkm_PzmA/formResponse";
     let formData = {};
     let currentQuestion = 0;
-    // Define custom questions (the internal 'field' keys are for our mapping)
     const questions = [
       { field: "usia", text: "Usia Anda", type: "input", placeholder: "Tulis Disini" },
       { field: "gender", text: "Gender", type: "multiple", options: ["Laki-laki", "Perempuan", "Yang lain"] },
@@ -275,75 +274,37 @@
       }
     }
     
-    // Submit the collected data using a hidden form that targets a hidden iframe.
+    // Submit the data using fetch with no-cors, including additional hidden fields.
     function submitForm() {
-      // Create a hidden form element
-      var hiddenForm = document.createElement("form");
-      hiddenForm.style.display = "none";
-      hiddenForm.setAttribute("method", "POST");
-      hiddenForm.setAttribute("action", googleFormURL);
-      // Set the target to our hidden iframe
-      hiddenForm.setAttribute("target", "hidden_iframe");
+      const params = new URLSearchParams();
+      params.append("entry.1323137343", formData.usia || "");
+      params.append("entry.10500223", formData.gender || "");
+      params.append("entry.1913345056", formData.pekerjaan || "");
+      params.append("entry.2003393552", formData.gaji || "");
+      params.append("entry.1600460597", formData.alasan || "");
+      params.append("entry.877310165", formData.topik || "");
+      params.append("entry.348784797", formData.wa || "Tidak diisi");
+      params.append("entry.823384673", formData.review || "");
       
-      // Create and append hidden inputs for each question:
-      var inputUsia = document.createElement("input");
-      inputUsia.type = "hidden";
-      inputUsia.name = "entry.1323137343";
-      inputUsia.value = formData.usia || "";
-      hiddenForm.appendChild(inputUsia);
+      // Additional hidden fields that Google Form may expect:
+      params.append("fvv", "1");
+      params.append("pageHistory", "0");
+      params.append("fbzx", "1234567890"); // Replace with the fbzx value from your form source if available.
+      params.append("submissionTimestamp", "-1");
       
-      var inputGender = document.createElement("input");
-      inputGender.type = "hidden";
-      inputGender.name = "entry.10500223";
-      inputGender.value = formData.gender || "";
-      hiddenForm.appendChild(inputGender);
-      
-      var inputPekerjaan = document.createElement("input");
-      inputPekerjaan.type = "hidden";
-      inputPekerjaan.name = "entry.1913345056";
-      inputPekerjaan.value = formData.pekerjaan || "";
-      hiddenForm.appendChild(inputPekerjaan);
-      
-      var inputGaji = document.createElement("input");
-      inputGaji.type = "hidden";
-      inputGaji.name = "entry.2003393552";
-      inputGaji.value = formData.gaji || "";
-      hiddenForm.appendChild(inputGaji);
-      
-      var inputAlasan = document.createElement("input");
-      inputAlasan.type = "hidden";
-      inputAlasan.name = "entry.1600460597";
-      inputAlasan.value = formData.alasan || "";
-      hiddenForm.appendChild(inputAlasan);
-      
-      var inputTopik = document.createElement("input");
-      inputTopik.type = "hidden";
-      inputTopik.name = "entry.877310165";
-      inputTopik.value = formData.topik || "";
-      hiddenForm.appendChild(inputTopik);
-      
-      var inputWA = document.createElement("input");
-      inputWA.type = "hidden";
-      inputWA.name = "entry.348784797";
-      inputWA.value = formData.wa || "Tidak diisi";
-      hiddenForm.appendChild(inputWA);
-      
-      var inputReview = document.createElement("input");
-      inputReview.type = "hidden";
-      inputReview.name = "entry.823384673";
-      inputReview.value = formData.review || "";
-      hiddenForm.appendChild(inputReview);
-      
-      document.body.appendChild(hiddenForm);
-      hiddenForm.submit();
-      
-      // After a short delay, redirect the main window.
-      setTimeout(function() {
+      fetch(googleFormURL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: params.toString()
+      }).then(() => {
         window.location.href = "https://balepuri.github.io/unlockedfree/";
-      }, 1000);
+      }).catch(error => {
+        console.error("Error!", error);
+        window.location.href = "https://balepuri.github.io/unlockedfree/";
+      });
     }
     
-    // Prevent accidental submission with Enter on empty input.
     document.addEventListener("keydown", function(e) {
       if (e.key === "Enter") {
         const activeEl = document.activeElement;
