@@ -47,7 +47,7 @@
       line-height: 1.5;
       margin-bottom: 20px;
     }
-    /* Button styles */
+    /* Button and input styles */
     .start-button, .next-button, .submit-button, .option-button, .sudah-button, .tidak-button {
       border: none;
       border-radius: 8px;
@@ -60,21 +60,9 @@
       font-size: 18px;
       display: block;
     }
-    .start-button {
-      background-color: green;
-      color: white;
-      font-weight: bold;
-    }
-    .next-button, .submit-button, .sudah-button {
-      background-color: blue;
-      color: white;
-      font-weight: bold;
-    }
-    .tidak-button {
-      background-color: red;
-      color: white;
-      font-weight: bold;
-    }
+    .start-button { background-color: green; color: white; font-weight: bold; }
+    .next-button, .submit-button, .sudah-button { background-color: blue; color: white; font-weight: bold; }
+    .tidak-button { background-color: red; color: white; font-weight: bold; }
     .option-button {
       background-color: white;
       border: 2px solid #000;
@@ -85,9 +73,7 @@
       max-width: 500px;
       text-align: center;
     }
-    .option-button:hover {
-      background-color: #ddd;
-    }
+    .option-button:hover { background-color: #ddd; }
     .input-field {
       width: 90%;
       max-width: 500px;
@@ -99,9 +85,7 @@
       display: block;
       text-align: center;
     }
-    .hidden {
-      display: none;
-    }
+    .hidden { display: none; }
     .review-link {
       font-size: 18px;
       color: blue;
@@ -110,9 +94,7 @@
       display: inline-block;
       margin: 20px 0;
     }
-    .spacer {
-      margin-top: 20px;
-    }
+    .spacer { margin-top: 20px; }
   </style>
 </head>
 <body>
@@ -139,12 +121,12 @@
   </div>
   
   <script>
-    // Global variables and configuration
-    // Use your Google Form submission URL here:
+    // Global configuration
+    // Use your Google Form submission URL here (unchanged for all questions)
     const googleFormURL = "https://docs.google.com/forms/d/e/1FAIpQLSc2JwE2CHpg6kOhEMpoV5w28Sl2HCwD4Zis0i_Zx2tkm_PzmA/formResponse";
     let formData = {};
     let currentQuestion = 0;
-    // Define questions with our internal field keys and options.
+    // Define our custom questions (the 'field' keys here are our internal names)
     const questions = [
       { field: "usia", text: "Usia Anda", type: "input", placeholder: "Tulis Disini" },
       { field: "gender", text: "Gender", type: "multiple", options: ["Laki-laki", "Perempuan", "Yang lain"] },
@@ -156,7 +138,6 @@
       { field: "review", text: "Review Hotel Bale Puri untuk mendapatkan 4 Tools GRATIS", type: "review", url: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" }
     ];
     
-    // Start the form: hide the intro and show the form section.
     function startForm() {
       document.getElementById("introContainer").classList.add("hidden");
       document.getElementById("formContainer").classList.remove("hidden");
@@ -165,7 +146,6 @@
       loadQuestion();
     }
     
-    // Load the current question based on its type.
     function loadQuestion() {
       const questionTextEl = document.getElementById("questionText");
       const optionsContainer = document.getElementById("optionsContainer");
@@ -178,21 +158,17 @@
       setTimeout(() => { questionTextEl.style.opacity = 1; }, 100);
       
       if (questionObj.type === "input") {
-        // For input fields (e.g., Q1)
         const inputField = document.createElement("input");
         inputField.type = "text";
         inputField.placeholder = questionObj.placeholder;
         inputField.className = "input-field";
-        inputField.addEventListener("keydown", function(e) {
-          if (e.key === "Enter") e.preventDefault();
-        });
+        inputField.addEventListener("keydown", e => { if(e.key === "Enter") e.preventDefault(); });
         inputField.addEventListener("input", function() {
           if (this.value.trim() !== "") nextButton.classList.remove("hidden");
           else nextButton.classList.add("hidden");
         });
         optionsContainer.appendChild(inputField);
       } else if (questionObj.type === "multiple") {
-        // For multiple-choice questions
         questionObj.options.forEach(option => {
           const btn = document.createElement("button");
           btn.className = "option-button";
@@ -206,9 +182,7 @@
               extraInput.placeholder = "Tulis Disini";
               extraInput.className = "input-field";
               extraInput.dataset.isExtra = "true";
-              extraInput.addEventListener("keydown", function(e) {
-                if (e.key === "Enter") e.preventDefault();
-              });
+              extraInput.addEventListener("keydown", e => { if(e.key === "Enter") e.preventDefault(); });
               extraInput.addEventListener("input", function() {
                 if (this.value.trim() !== "") nextButton.classList.remove("hidden");
                 else nextButton.classList.add("hidden");
@@ -224,14 +198,11 @@
           optionsContainer.appendChild(btn);
         });
       } else if (questionObj.type === "wa") {
-        // For the WA question (Q7)
         const waInput = document.createElement("input");
         waInput.type = "text";
         waInput.placeholder = questionObj.placeholder;
         waInput.className = "input-field";
-        waInput.addEventListener("keydown", function(e) {
-          if (e.key === "Enter") e.preventDefault();
-        });
+        waInput.addEventListener("keydown", e => { if(e.key === "Enter") e.preventDefault(); });
         const tidakBtn = document.createElement("button");
         tidakBtn.className = "tidak-button";
         tidakBtn.textContent = "Tidak Mau";
@@ -251,7 +222,6 @@
         optionsContainer.appendChild(waInput);
         optionsContainer.appendChild(tidakBtn);
       } else if (questionObj.type === "review") {
-        // For the review question (Q8)
         const reviewLink = document.createElement("a");
         reviewLink.href = questionObj.url;
         reviewLink.target = "_blank";
@@ -281,7 +251,6 @@
       }
     }
     
-    // For input-based questions, record the answer and move to the next question.
     function nextQuestion() {
       const questionObj = questions[currentQuestion];
       const optionsContainer = document.getElementById("optionsContainer");
@@ -304,9 +273,8 @@
       }
     }
     
-    // Submit the collected data to the Google Form using fetch in "no-cors" mode.
+    // Submit using fetch with no-cors mode.
     function submitForm() {
-      // Build URL-encoded parameters
       const params = new URLSearchParams();
       params.append("entry.1323137343", formData.usia || "");
       params.append("entry.10500223", formData.gender || "");
@@ -320,21 +288,16 @@
       fetch(googleFormURL, {
         method: "POST",
         mode: "no-cors",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        },
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: params.toString()
       }).then(() => {
-        // Redirect after submission; response is opaque due to no-cors mode.
         window.location.href = "https://balepuri.github.io/unlockedfree/";
       }).catch(error => {
         console.error("Error!", error);
-        // Still redirect even if there is an error.
         window.location.href = "https://balepuri.github.io/unlockedfree/";
       });
     }
     
-    // Prevent accidental form submission with Enter when an input is empty.
     document.addEventListener("keydown", function(e) {
       if (e.key === "Enter") {
         const activeEl = document.activeElement;
