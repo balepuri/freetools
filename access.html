@@ -121,7 +121,7 @@
   </div>
   
   <script>
-    // Set your backend URL (the standalone Apps Script web app URL)
+    // Set your backend URL (the standalone Apps Script Web App URL)
     const backendURL = "https://script.google.com/macros/s/AKfycbwprsRGgkuLizN69F0nqD0bWHUT82dQYsNgT2MEJ5yLBK1K5cje9EzekeE8rGZ0J_wb7Q/exec";
     let formData = {};
     let currentQuestion = 0;
@@ -138,8 +138,9 @@
         type: "multiple", 
         options: ["Cara kamu bisa membangun bisnis 100jt/bln", "Cara menghasilkan 100jt/bln dengan skill yang sudah kamu punyai", "Cara kita membangun bisnis 500jt/bln", "Cara mencapai kebebasan finansial di dunia karir dan bisnis"] 
       },
-      // QUESTION 7: Updated with two buttons for "Mau" and "Tidak Mau"
+      // QUESTION 7: Updated with two buttons ("Mau" and "Tidak Mau")
       { field: "wa", text: "Maukah Anda mendapatkan update saat materi di release?", type: "wa", placeholder: "Tulis No WA Mu disini:" },
+      // QUESTION 8: Updated text
       { field: "review", text: "Review Hotel Bale Puri untuk mendapatkan 3 Tools GRATIS", type: "review", url: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" }
     ];
     
@@ -158,6 +159,8 @@
       nextButton.classList.add("hidden");
       optionsContainer.innerHTML = "";
       const questionObj = questions[currentQuestion];
+      
+      // For Q6, use innerHTML so our formatted text displays.
       if (questionObj.field === "topik") {
         questionTextEl.innerHTML = questionObj.text;
       } else {
@@ -187,7 +190,7 @@
           btn.style.textAlign = "center";
           btn.addEventListener("click", function() {
             if (option === "Yang lain") {
-              // Create an extra input with its own local Next button
+              // Create an extra input with a local Next button
               optionsContainer.innerHTML = "";
               const extraInput = document.createElement("input");
               extraInput.type = "text";
@@ -225,13 +228,13 @@
           optionsContainer.appendChild(btn);
         });
       } else if (questionObj.type === "wa") {
-        // For Q7: Two buttons approach
+        // For Q7: Two buttons ("Mau" and "Tidak Mau")
         const buttonContainer = document.createElement("div");
         const mauBtn = document.createElement("button");
         mauBtn.className = "start-button"; // green styling
         mauBtn.textContent = "Mau";
         const tidakBtn = document.createElement("button");
-        tidakBtn.className = "tidak-button";
+        tidakBtn.className = "tidak-button"; // red styling
         tidakBtn.textContent = "Tidak Mau";
         buttonContainer.appendChild(mauBtn);
         buttonContainer.appendChild(tidakBtn);
@@ -253,7 +256,7 @@
           const nextBtn = document.createElement("button");
           nextBtn.className = "next-button";
           nextBtn.textContent = "Next";
-          nextBtn.style.display = "none"; // Initially hidden
+          nextBtn.style.display = "none"; // hidden initially
           waInput.addEventListener("input", function() {
             if (this.value.trim() !== "") {
               nextBtn.style.display = "block";
@@ -327,18 +330,27 @@
     
     function submitForm() {
       console.log("Submitting formData:", JSON.stringify(formData));
-      fetch(backendURL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-      }).then(() => {
-        console.log("Submission successful");
+      // Use navigator.sendBeacon if available for immediate redirection.
+      if (navigator.sendBeacon) {
+        const blob = new Blob([JSON.stringify(formData)], { type: "application/json" });
+        const beaconSent = navigator.sendBeacon(backendURL, blob);
+        console.log("Beacon sent:", beaconSent);
         window.location.href = "https://balepuri.github.io/unlockedfree/";
-      }).catch(error => {
-        console.error("Error during submission:", error);
-        window.location.href = "https://balepuri.github.io/unlockedfree/";
-      });
+      } else {
+        // Fallback to fetch
+        fetch(backendURL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData)
+        }).then(() => {
+          console.log("Submission successful");
+          window.location.href = "https://balepuri.github.io/unlockedfree/";
+        }).catch(error => {
+          console.error("Error during submission:", error);
+          window.location.href = "https://balepuri.github.io/unlockedfree/";
+        });
+      }
     }
     
     document.addEventListener("keydown", function(e) {
