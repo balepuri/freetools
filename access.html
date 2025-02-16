@@ -121,7 +121,7 @@
   </div>
   
   <script>
-    // Set your backend URL (the standalone Apps Script Web App URL)
+    // Set your backend URL (the standalone Apps Script web app URL)
     const backendURL = "https://script.google.com/macros/s/AKfycbwprsRGgkuLizN69F0nqD0bWHUT82dQYsNgT2MEJ5yLBK1K5cje9EzekeE8rGZ0J_wb7Q/exec";
     let formData = {};
     let currentQuestion = 0;
@@ -159,8 +159,6 @@
       nextButton.classList.add("hidden");
       optionsContainer.innerHTML = "";
       const questionObj = questions[currentQuestion];
-      
-      // For Q6, use innerHTML so our formatted text displays.
       if (questionObj.field === "topik") {
         questionTextEl.innerHTML = questionObj.text;
       } else {
@@ -190,7 +188,7 @@
           btn.style.textAlign = "center";
           btn.addEventListener("click", function() {
             if (option === "Yang lain") {
-              // Create an extra input with a local Next button
+              // Create an extra input with its own local Next button
               optionsContainer.innerHTML = "";
               const extraInput = document.createElement("input");
               extraInput.type = "text";
@@ -228,13 +226,13 @@
           optionsContainer.appendChild(btn);
         });
       } else if (questionObj.type === "wa") {
-        // For Q7: Two buttons ("Mau" and "Tidak Mau")
+        // For Q7: Two buttons approach
         const buttonContainer = document.createElement("div");
         const mauBtn = document.createElement("button");
         mauBtn.className = "start-button"; // green styling
         mauBtn.textContent = "Mau";
         const tidakBtn = document.createElement("button");
-        tidakBtn.className = "tidak-button"; // red styling
+        tidakBtn.className = "tidak-button";
         tidakBtn.textContent = "Tidak Mau";
         buttonContainer.appendChild(mauBtn);
         buttonContainer.appendChild(tidakBtn);
@@ -328,21 +326,22 @@
       }
     }
     
+    // Updated submitForm using navigator.sendBeacon for immediate redirection
     function submitForm() {
       console.log("Submitting formData:", JSON.stringify(formData));
-      // Use navigator.sendBeacon if available for immediate redirection.
+      const payload = JSON.stringify(formData);
+      const blob = new Blob([payload], { type: "application/json" });
       if (navigator.sendBeacon) {
-        const blob = new Blob([JSON.stringify(formData)], { type: "application/json" });
         const beaconSent = navigator.sendBeacon(backendURL, blob);
         console.log("Beacon sent:", beaconSent);
         window.location.href = "https://balepuri.github.io/unlockedfree/";
       } else {
-        // Fallback to fetch
+        // Fallback: Use fetch with no-cors
         fetch(backendURL, {
           method: "POST",
           mode: "no-cors",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData)
+          body: payload
         }).then(() => {
           console.log("Submission successful");
           window.location.href = "https://balepuri.github.io/unlockedfree/";
