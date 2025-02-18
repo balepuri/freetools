@@ -145,7 +145,7 @@
       },
       // QUESTION 7: Updated with two buttons for "Mau" and "Tidak Mau"
       { field: "wa", text: "Maukah Anda mendapatkan update saat materi di release?", type: "wa", placeholder: "Tulis No WA Mu disini:" },
-      // QUESTION 8: Updated text change and pop-up behavior
+      // QUESTION 8: Updated text change and pop-up behavior using window.open (no embedding)
       { field: "review", text: "Review Hotel Bale Puri untuk mendapatkan 3 Tools GRATIS", type: "review", url: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" }
     ];
     
@@ -277,51 +277,33 @@
           optionsContainer.appendChild(nextBtn);
         });
       } else if (questionObj.type === "review") {
-        // For Q8: Open a pop-up with the embedded Google Review form and a "Sudah!" button.
+        // For Q8: Open a pop-up (non-embedded) for Google Reviews.
         const reviewLink = document.createElement("a");
         reviewLink.href = questionObj.url;
         reviewLink.textContent = "Klik Disini untuk Review";
         reviewLink.className = "review-link";
-        // Instead of target="_blank", we open a custom pop-up.
+        optionsContainer.appendChild(reviewLink);
         reviewLink.addEventListener("click", function(e) {
           e.preventDefault();
-          let popUp = window.open("", "ReviewPopup", "width=600,height=600");
-          popUp.document.write(`
-            <!DOCTYPE html>
-            <html lang="id">
-            <head>
-              <meta charset="UTF-8">
-              <title>Review</title>
-              <style>
-                body { font-family: 'Lexend', sans-serif; padding: 20px; text-align: center; }
-                .review-frame { width: 100%; height: 80%; border: none; }
-                .close-btn { margin-top: 20px; padding: 10px 20px; background: blue; color: white; border: none; border-radius: 5px; font-size: 18px; cursor: pointer; }
-              </style>
-            </head>
-            <body>
-              <iframe class="review-frame" src="${questionObj.url}"></iframe>
-              <button class="close-btn" onclick="window.close()">Sudah!</button>
-            </body>
-            </html>
-          `);
-          // Poll to detect when the pop-up is closed.
+          // Open the review URL in a new pop-up window (not embedded)
+          let popUp = window.open(questionObj.url, "ReviewPopup", "width=600,height=600");
+          // Poll until the pop-up is closed.
           let pollTimer = window.setInterval(function() {
-             if (popUp.closed !== false) { // if closed
-                window.clearInterval(pollTimer);
-                formData[questionObj.field] = "Review Selesai";
-                console.log("Collected", questionObj.field, "= Review Selesai");
-                // Proceed to final submit page.
-                const formContainer = document.getElementById("formContainer");
-                formContainer.innerHTML = "";
-                const submitBtn = document.createElement("button");
-                submitBtn.className = "submit-button";
-                submitBtn.textContent = "Submit";
-                submitBtn.addEventListener("click", submitForm);
-                formContainer.appendChild(submitBtn);
-             }
+            if (popUp.closed !== false) { // if closed
+              window.clearInterval(pollTimer);
+              formData[questionObj.field] = "Review Selesai";
+              console.log("Collected", questionObj.field, "= Review Selesai");
+              // Proceed to final submit page.
+              const formContainer = document.getElementById("formContainer");
+              formContainer.innerHTML = "";
+              const submitBtn = document.createElement("button");
+              submitBtn.className = "submit-button";
+              submitBtn.textContent = "Submit";
+              submitBtn.addEventListener("click", submitForm);
+              formContainer.appendChild(submitBtn);
+            }
           }, 500);
         });
-        optionsContainer.appendChild(reviewLink);
       }
     }
     
