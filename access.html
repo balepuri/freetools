@@ -284,10 +284,11 @@
         reviewLink.className = "review-link";
         optionsContainer.appendChild(reviewLink);
         
-        // New info text below the hyperlink
+        // New info text below the hyperlink with inline styling for bigger red text.
         const infoText = document.createElement("div");
         infoText.className = "info-text";
-        infoText.style.fontSize = "16px";
+        infoText.style.fontSize = "18px";
+        infoText.style.color = "red";
         infoText.style.marginTop = "10px";
         infoText.textContent = "MOHON BACA: Balik Ke Halaman Ini Setelah Review";
         optionsContainer.appendChild(infoText);
