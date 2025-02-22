@@ -145,7 +145,7 @@
       },
       // QUESTION 7: Updated with two buttons for "Mau" and "Tidak Mau"
       { field: "wa", text: "Maukah Anda mendapatkan update saat materi di release?", type: "wa", placeholder: "Tulis No WA Mu disini:" },
-      // QUESTION 8: Updated text change
+      // QUESTION 8: Updated text change for review
       { field: "review", text: "Review Hotel Bale Puri untuk mendapatkan 3 Tools GRATIS", type: "review", url: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" }
     ];
     
@@ -283,6 +283,15 @@
         reviewLink.textContent = "Klik Disini untuk Review";
         reviewLink.className = "review-link";
         optionsContainer.appendChild(reviewLink);
+        
+        // New info text below the hyperlink
+        const infoText = document.createElement("div");
+        infoText.className = "info-text";
+        infoText.style.fontSize = "16px";
+        infoText.style.marginTop = "10px";
+        infoText.textContent = "Balik Ke Halaman Ini Setelah Review";
+        optionsContainer.appendChild(infoText);
+        
         const sudahButton = document.createElement("button");
         sudahButton.className = "sudah-button hidden";
         sudahButton.textContent = "Sudah :)";
@@ -301,6 +310,10 @@
         optionsContainer.appendChild(sudahButton);
         reviewLink.addEventListener("click", function() {
           setTimeout(function() {
+            // Remove the info text when the link is clicked
+            if (infoText.parentNode) {
+              infoText.parentNode.removeChild(infoText);
+            }
             sudahButton.classList.remove("hidden");
           }, 300);
         });
