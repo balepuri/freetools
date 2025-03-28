@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    /* Basic styles */
     body {
       margin: 0;
       padding: 20px;
@@ -36,6 +37,32 @@
       color: #FF0000;
       margin-bottom: 15px;
     }
+    .headline2 {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .description {
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    /* Button styles */
+    .start-button, .sudah-button {
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 10px auto;
+      padding: 15px;
+      width: 90%;
+      max-width: 500px;
+      transition: background 0.3s ease;
+      font-size: 18px;
+      display: block;
+      font-weight: bold;
+    }
+    .start-button { background-color: green; color: white; }
+    .sudah-button { background-color: blue; color: white; }
     .review-link {
       font-size: 18px;
       color: blue;
@@ -44,41 +71,55 @@
       display: inline-block;
       margin: 20px 0;
     }
-    .sudah-button {
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin: 10px auto;
-      padding: 15px;
-      width: 90%;
-      max-width: 500px;
-      background-color: blue;
-      color: white;
-      font-weight: bold;
-      font-size: 18px;
-      display: none;
-    }
     .loading-text {
       font-size: 14px;
       color: black;
       margin-top: 10px;
     }
+    .hidden { display: none; }
   </style>
 </head>
 <body>
-  <div class="container" id="reviewContainer">
-    <div class="headline1">Review Hotel Bale Puri untuk mendapatkan 3 Tools GRATIS</div>
+  <!-- Introduction Section -->
+  <div class="container" id="introContainer">
+    <div class="headline1">Kalo Anda isi form di bawah ini, Anda dapat Akses ke semua Toolsnya!</div>
+    <div class="headline2">YUK ISI INI UNTUK DAPETIN 3 TOOLS DARIPADA 1</div>
+    <div class="description">
+      ✅ 20K+ ChatGPT Prompts<br>
+      ✅ 1400+ AI Tools<br>
+      ✅ Financial Management
+    </div>
+    <button class="start-button" onclick="startForm()">Saya Mau Tools Nya!</button>
+  </div>
+  
+  <!-- Form Section (only Google Review) -->
+  <div class="container hidden" id="formContainer">
+    <div class="headline2">Review Hotel Bale Puri untuk mendapatkan 3 Tools GRATIS</div>
     <a href="https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" target="_blank" class="review-link">Klik Disini untuk Review</a>
-    <div class="info-text" style="font-size: 18px; color: red; margin-top: 10px;">MOHON BACA: Balik Ke Halaman Ini Setelah Review</div>
-    <button class="sudah-button" id="sudahButton">Sudah :)</button>
+    <div class="info-text" style="font-size:18px; color:red; margin-top:10px;">
+      MOHON BACA: Balik Ke Halaman Ini Setelah Review
+    </div>
+    <button class="sudah-button hidden" id="sudahButton" onclick="submitForm()">Sudah :)</button>
   </div>
 
   <script>
+    function startForm() {
+      document.getElementById("introContainer").classList.add("hidden");
+      document.getElementById("formContainer").classList.remove("hidden");
+    }
+
     document.querySelector(".review-link").addEventListener("click", function() {
       setTimeout(function() {
-        document.querySelector(".sudah-button").style.display = "block";
+        document.getElementById("sudahButton").classList.remove("hidden");
       }, 300);
     });
+
+    function submitForm() {
+      document.getElementById("formContainer").innerHTML = "<div class='loading-text'>Mohon Ditunggu...</div>";
+      setTimeout(() => {
+        window.location.href = "https://balepuri.github.io/unlockedfree/";
+      }, 2000);
+    }
   </script>
 </body>
 </html>
