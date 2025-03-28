@@ -127,13 +127,11 @@
             let buttons = {
                 1: document.getElementById("btn1"),
                 2: document.getElementById("btn2"),
-                3: document.getElementById("btn3"),
-                5: document.getElementById("btn5") // Ensure this button also gets disabled
             };
 
             for (let key in buttons) {
-                if (parseInt(key) !== selectedOption) {
-                    buttons[key].disabled = true; // Make other buttons dark gray
+                if (buttons[key] && parseInt(key) !== selectedOption) { 
+                    buttons[key].disabled = true; // Disable other buttons
                 }
             }
 
