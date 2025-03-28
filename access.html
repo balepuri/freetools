@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* Basic styles */
     body {
       margin: 0;
       padding: 20px;
@@ -37,55 +36,6 @@
       color: #FF0000;
       margin-bottom: 15px;
     }
-    .headline2 {
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 20px;
-    }
-    .description {
-      font-size: 16px;
-      line-height: 1.5;
-      margin-bottom: 20px;
-    }
-    /* Button and input styles */
-    .start-button, .next-button, .submit-button, .option-button, .sudah-button, .tidak-button {
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin: 10px auto;
-      padding: 15px;
-      width: 90%;
-      max-width: 500px;
-      transition: background 0.3s ease;
-      font-size: 18px;
-      display: block;
-    }
-    .start-button { background-color: green; color: white; font-weight: bold; }
-    .next-button, .submit-button, .sudah-button { background-color: blue; color: white; font-weight: bold; }
-    .tidak-button { background-color: red; color: white; font-weight: bold; }
-    .option-button {
-      background-color: white;
-      border: 2px solid #000;
-      border-radius: 8px;
-      padding: 15px;
-      margin: 10px auto;
-      width: 90%;
-      max-width: 500px;
-      text-align: center;
-    }
-    .option-button:hover { background-color: #ddd; }
-    .input-field {
-      width: 90%;
-      max-width: 500px;
-      padding: 10px;
-      font-size: 18px;
-      border: 2px solid #000;
-      border-radius: 10px;
-      margin: 10px auto;
-      display: block;
-      text-align: center;
-    }
-    .hidden { display: none; }
     .review-link {
       font-size: 18px;
       color: blue;
@@ -94,290 +44,41 @@
       display: inline-block;
       margin: 20px 0;
     }
+    .sudah-button {
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 10px auto;
+      padding: 15px;
+      width: 90%;
+      max-width: 500px;
+      background-color: blue;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      display: none;
+    }
     .loading-text {
       font-size: 14px;
       color: black;
       margin-top: 10px;
     }
-    .spacer { margin-top: 20px; }
   </style>
 </head>
 <body>
-  <!-- Introduction Section -->
-  <div class="container" id="introContainer">
-    <div class="headline1">Kalo Anda isi form di bawah ini, Anda dapat Akses ke semua Toolsnya!</div>
-    <div class="headline2">YUK ISI INI UNTUK DAPETIN 3 TOOLS DARIPADA 1</div>
-    <div class="description">
-      ✅ 20K+ ChatGPT Prompts<br>
-      ✅ 1400+ AI Tools<br>
-      ✅ Financial Management
-    </div>
-    <button class="start-button" onclick="startForm()">Saya Mau Tools Nya!</button>
+  <div class="container" id="reviewContainer">
+    <div class="headline1">Review Hotel Bale Puri untuk mendapatkan 3 Tools GRATIS</div>
+    <a href="https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" target="_blank" class="review-link">Klik Disini untuk Review</a>
+    <div class="info-text" style="font-size: 18px; color: red; margin-top: 10px;">MOHON BACA: Balik Ke Halaman Ini Setelah Review</div>
+    <button class="sudah-button" id="sudahButton">Sudah :)</button>
   </div>
-  
-  <!-- Form Section (hidden initially) -->
-  <div class="container hidden" id="formContainer">
-    <div id="questionContainer">
-      <div id="questionText" class="headline2"></div>
-    </div>
-    <div id="optionsContainer"></div>
-    <!-- Next button appears for input-based questions -->
-    <button class="next-button hidden" id="nextButton" onclick="nextQuestion()">Next</button>
-  </div>
-  
+
   <script>
-    // Set your backend URL (the standalone Apps Script web app URL)
-    const backendURL = "https://script.google.com/macros/s/AKfycbwprsRGgkuLizN69F0nqD0bWHUT82dQYsNgT2MEJ5yLBK1K5cje9EzekeE8rGZ0J_wb7Q/exec";
-    let formData = {};
-    let currentQuestion = 0;
-    // Define questions (internal keys; these keys correspond to the JSON structure expected by your backend)
-    const questions = [
-      { field: "usia", text: "Usia Anda", type: "input", placeholder: "Tulis Disini" },
-      { field: "gender", text: "Gender", type: "multiple", options: ["Laki-laki", "Perempuan", "Yang lain"] },
-      { field: "pekerjaan", text: "Status Pekerjaan", type: "multiple", options: ["Karyawan Swasta", "Wiraswasta/Entrepreneur", "Freelancer", "Yang lain"] },
-      { field: "gaji", text: "Rata-rata gaji pekerjaan", type: "multiple", options: ["1jt-20jt/bulan", "20jt-50jt/bulan", "50jt-100jt/bulan", "100jt-200jt/bulan", "200jt+/bulan"] },
-      { field: "alasan", text: "Apa yang membuat Anda ingin menginap di Bale?", type: "multiple", options: ["Ada acara dekat lokasi", "Desain bangunan bagus", "Ada pekerjaan kantor", "Ingin konsentrasi bekerja", "Bosan di rumah", "Yang lain"] },
-      // QUESTION 6: Updated display text split into two parts.
-      { field: "topik", 
-        text: "<span style='font-size:16px;'>Bale sangat peduli terhadap dunia karir Gen Z dan milenial, dan kami ingin berkontribusi berupa materi untuk perkembangan tersebut.</span><br><br><span style='font-size:24px;'>Topic mana dibawah ini yang sekiranya menarik bagi kamu:</span>", 
-        type: "multiple", 
-        options: ["Cara kamu bisa membangun bisnis 100jt/bln", "Cara menghasilkan 100jt/bln dengan skill yang sudah kamu punyai", "Cara kita membangun bisnis 500jt/bln", "Cara mencapai kebebasan finansial di dunia karir dan bisnis"] 
-      },
-      // QUESTION 7: Updated with two buttons for "Mau" and "Tidak Mau"
-      { field: "wa", text: "Maukah Anda mendapatkan update saat materi di release?", type: "wa", placeholder: "Tulis No WA Mu disini:" },
-      // QUESTION 8: Updated text change for review
-      { field: "review", text: "Review Hotel Bale Puri untuk mendapatkan 3 Tools GRATIS", type: "review", url: "https://search.google.com/local/writereview?placeid=ChIJm7ZyzD73aS4Rp9VEEs85aoY" }
-    ];
-    
-    function startForm() {
-      document.getElementById("introContainer").classList.add("hidden");
-      document.getElementById("formContainer").classList.remove("hidden");
-      currentQuestion = 0;
-      formData = {};
-      loadQuestion();
-    }
-    
-    function loadQuestion() {
-      const questionTextEl = document.getElementById("questionText");
-      const optionsContainer = document.getElementById("optionsContainer");
-      const nextButton = document.getElementById("nextButton");
-      nextButton.classList.add("hidden");
-      optionsContainer.innerHTML = "";
-      const questionObj = questions[currentQuestion];
-      if (questionObj.field === "topik") {
-        questionTextEl.innerHTML = questionObj.text;
-      } else {
-        questionTextEl.textContent = questionObj.text;
-      }
-      questionTextEl.style.opacity = 0;
-      setTimeout(() => { questionTextEl.style.opacity = 1; }, 100);
-      
-      console.log("Loading question:", questionObj.field, "Current formData:", formData);
-      
-      if (questionObj.type === "input") {
-        const inputField = document.createElement("input");
-        inputField.type = "text";
-        inputField.placeholder = questionObj.placeholder;
-        inputField.className = "input-field";
-        inputField.addEventListener("keydown", e => { if(e.key === "Enter") e.preventDefault(); });
-        inputField.addEventListener("input", function() {
-          if (this.value.trim() !== "") nextButton.classList.remove("hidden");
-          else nextButton.classList.add("hidden");
-        });
-        optionsContainer.appendChild(inputField);
-      } else if (questionObj.type === "multiple") {
-        questionObj.options.forEach(option => {
-          const btn = document.createElement("button");
-          btn.className = "option-button";
-          btn.textContent = option;
-          btn.style.textAlign = "center";
-          btn.addEventListener("click", function() {
-            if (option === "Yang lain") {
-              // Create an extra input with its own local Next button
-              optionsContainer.innerHTML = "";
-              const extraInput = document.createElement("input");
-              extraInput.type = "text";
-              extraInput.placeholder = "Tulis Disini";
-              extraInput.className = "input-field";
-              extraInput.dataset.isExtra = "true";
-              extraInput.addEventListener("keydown", e => { if(e.key === "Enter") e.preventDefault(); });
-              optionsContainer.appendChild(extraInput);
-              
-              const localNextBtn = document.createElement("button");
-              localNextBtn.className = "next-button";
-              localNextBtn.textContent = "Next";
-              localNextBtn.style.display = "none"; // hidden initially
-              extraInput.addEventListener("input", function() {
-                if (this.value.trim() !== "") {
-                  localNextBtn.style.display = "block";
-                } else {
-                  localNextBtn.style.display = "none";
-                }
-              });
-              localNextBtn.addEventListener("click", function() {
-                formData[questionObj.field] = extraInput.value.trim();
-                console.log("Collected", questionObj.field, "=", extraInput.value.trim());
-                currentQuestion++;
-                loadQuestion();
-              });
-              optionsContainer.appendChild(localNextBtn);
-            } else {
-              formData[questionObj.field] = option;
-              console.log("Collected", questionObj.field, "=", option);
-              currentQuestion++;
-              loadQuestion();
-            }
-          });
-          optionsContainer.appendChild(btn);
-        });
-      } else if (questionObj.type === "wa") {
-        // For Q7: Two buttons approach
-        const buttonContainer = document.createElement("div");
-        const mauBtn = document.createElement("button");
-        mauBtn.className = "start-button"; // green styling
-        mauBtn.textContent = "Mau";
-        const tidakBtn = document.createElement("button");
-        tidakBtn.className = "tidak-button";
-        tidakBtn.textContent = "Tidak Mau";
-        buttonContainer.appendChild(mauBtn);
-        buttonContainer.appendChild(tidakBtn);
-        optionsContainer.appendChild(buttonContainer);
-        
-        tidakBtn.addEventListener("click", function() {
-          formData[questionObj.field] = "Tidak diisi";
-          console.log("Collected", questionObj.field, "= Tidak diisi");
-          currentQuestion++;
-          loadQuestion();
-        });
-        
-        mauBtn.addEventListener("click", function() {
-          buttonContainer.innerHTML = "";
-          const waInput = document.createElement("input");
-          waInput.type = "text";
-          waInput.placeholder = "Tulis No WA Mu disini";
-          waInput.className = "input-field";
-          const nextBtn = document.createElement("button");
-          nextBtn.className = "next-button";
-          nextBtn.textContent = "Next";
-          nextBtn.style.display = "none"; // Initially hidden
-          waInput.addEventListener("input", function() {
-            if (this.value.trim() !== "") {
-              nextBtn.style.display = "block";
-            } else {
-              nextBtn.style.display = "none";
-            }
-          });
-          nextBtn.addEventListener("click", function() {
-            formData[questionObj.field] = waInput.value.trim();
-            console.log("Collected", questionObj.field, "=", waInput.value.trim());
-            currentQuestion++;
-            loadQuestion();
-          });
-          optionsContainer.appendChild(waInput);
-          optionsContainer.appendChild(nextBtn);
-        });
-      } else if (questionObj.type === "review") {
-        const reviewLink = document.createElement("a");
-        reviewLink.href = questionObj.url;
-        reviewLink.target = "_blank";
-        reviewLink.textContent = "Klik Disini untuk Review";
-        reviewLink.className = "review-link";
-        optionsContainer.appendChild(reviewLink);
-        
-        // New info text below the hyperlink with inline styling for bigger red text.
-        const infoText = document.createElement("div");
-        infoText.className = "info-text";
-        infoText.style.fontSize = "18px";
-        infoText.style.color = "red";
-        infoText.style.marginTop = "10px";
-        infoText.textContent = "MOHON BACA: Balik Ke Halaman Ini Setelah Review";
-        optionsContainer.appendChild(infoText);
-        
-        const sudahButton = document.createElement("button");
-        sudahButton.className = "sudah-button hidden";
-        sudahButton.textContent = "Sudah :)";
-        sudahButton.addEventListener("click", function() {
-          formData[questionObj.field] = "Review Selesai";
-          console.log("Collected", questionObj.field, "= Review Selesai");
-          // Clear the form container and show a final Submit button.
-          const formContainer = document.getElementById("formContainer");
-          formContainer.innerHTML = "";
-          const submitBtn = document.createElement("button");
-          submitBtn.className = "submit-button";
-          submitBtn.textContent = "Submit";
-          submitBtn.addEventListener("click", submitForm);
-          formContainer.appendChild(submitBtn);
-        });
-        optionsContainer.appendChild(sudahButton);
-        reviewLink.addEventListener("click", function() {
-          setTimeout(function() {
-            // Remove the info text when the link is clicked
-            if (infoText.parentNode) {
-              infoText.parentNode.removeChild(infoText);
-            }
-            sudahButton.classList.remove("hidden");
-          }, 300);
-        });
-      }
-    }
-    
-    function nextQuestion() {
-      const questionObj = questions[currentQuestion];
-      const optionsContainer = document.getElementById("optionsContainer");
-      const nextButton = document.getElementById("nextButton");
-      if (questionObj.type === "input" || questionObj.type === "wa") {
-        const inputEl = optionsContainer.querySelector("input");
-        if (inputEl && inputEl.value.trim() !== "") {
-          formData[questionObj.field] = inputEl.value.trim();
-          console.log("Collected", questionObj.field, "=", inputEl.value.trim());
-        }
-      }
-      if (questionObj.type === "multiple") {
-        const extraInput = optionsContainer.querySelector("input[data-isExtra='true']");
-        if (extraInput && extraInput.value.trim() !== "") {
-          formData[questionObj.field] = extraInput.value.trim();
-          console.log("Collected", questionObj.field, "=", extraInput.value.trim());
-        }
-      }
-      currentQuestion++;
-      if (currentQuestion < questions.length) {
-        loadQuestion();
-      }
-    }
-    
-    function submitForm() {
-      console.log("Submitting formData:", JSON.stringify(formData));
-      // Show a "Mohon Ditunggu..." message
-      const formContainer = document.getElementById("formContainer");
-      const loadingMessage = document.createElement("div");
-      loadingMessage.className = "loading-text";
-      loadingMessage.textContent = "Mohon Ditunggu...";
-      formContainer.appendChild(loadingMessage);
-      
-      fetch(backendURL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
-      }).then(() => {
-        console.log("Submission successful");
-        window.location.href = "https://balepuri.github.io/unlockedfree/";
-      }).catch(error => {
-        console.error("Error during submission:", error);
-        window.location.href = "https://balepuri.github.io/unlockedfree/";
-      });
-    }
-    
-    document.addEventListener("keydown", function(e) {
-      if (e.key === "Enter") {
-        const activeEl = document.activeElement;
-        if (activeEl.tagName === "INPUT" && activeEl.value.trim() === "") {
-          e.preventDefault();
-        }
-      }
+    document.querySelector(".review-link").addEventListener("click", function() {
+      setTimeout(function() {
+        document.querySelector(".sudah-button").style.display = "block";
+      }, 300);
     });
   </script>
-  
-  <div class="spacer"></div>
 </body>
 </html>
